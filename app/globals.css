@@ -1,0 +1,626 @@
+@import "tailwindcss";
+
+:root {
+  --background: #FFFFFF;
+  --foreground: #0A0A0A;
+  --text-primary: #0A0A0A;
+  --text-secondary: #4D4D4D;
+  --border-color: #E6E6E6;
+  --cnn-red: #CC0000;
+  --cnn-black: #000000;
+  --cnn-border-gray: #E6E6E6;
+}
+
+html {
+  color-scheme: light;
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+body {
+  background: #FFFFFF;
+  color: #0A0A0A;
+  font-family: CNN, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  overflow-x: hidden;
+  max-width: 100vw;
+  position: relative;
+}
+
+/* CNN Centered Container */
+.cnn-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Responsive Container System */
+/* Tablet: 768px - 1023px */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .cnn-container {
+    max-width: 100%;
+    padding: 0 2rem;
+  }
+}
+
+/* Small Tablet: 640px - 767px */
+@media (min-width: 640px) and (max-width: 767px) {
+  .cnn-container {
+    max-width: 100%;
+    padding: 0 1.5rem;
+  }
+}
+
+/* Mobile: Below 640px */
+@media (max-width: 639px) {
+  .cnn-container {
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+}
+
+/* Desktop: 1024px and up */
+@media (min-width: 1024px) {
+  .cnn-container {
+    padding: 0 2rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .cnn-container {
+    padding: 0 3rem;
+  }
+}
+
+/* Article Content Styling */
+.article-content {
+  color: #4D4D4D;
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.article-content h1,
+.article-content h2,
+.article-content h3,
+.article-content h4,
+.article-content h5,
+.article-content h6 {
+  color: #0A0A0A;
+  font-weight: bold;
+  margin-top: 1.5em;
+  margin-bottom: 0.75em;
+}
+
+.article-content img {
+  max-width: 100% !important;
+  height: auto !important;
+  margin: 1.5em 0;
+  border-radius: 8px;
+}
+
+.article-content a {
+  color: #0A0A0A;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.article-content a:hover {
+  color: #CC0000;
+}
+
+.article-content p {
+  margin-bottom: 1.2em;
+}
+
+.article-content blockquote {
+  border-left: 4px solid #CC0000;
+  padding-left: 1em;
+  margin: 1.5em 0;
+  font-style: italic;
+  color: #666;
+}
+
+/* CNN Global Design System */
+* {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* CNN Color System */
+.cnn-red-accent {
+  color: #cc0000 !important;
+}
+
+.cnn-red-bg {
+  background-color: #cc0000 !important;
+}
+
+.cnn-red-hover:hover {
+  color: #cc0000 !important;
+}
+
+.cnn-red-bg-hover:hover {
+  background-color: #cc0000 !important;
+}
+
+.cnn-black-bg {
+  background-color: #000000 !important;
+}
+
+.cnn-gray-border {
+  border-color: #e5e5e5 !important;
+}
+
+.cnn-text-black {
+  color: #000000 !important;
+}
+
+.cnn-text-white {
+  color: #ffffff !important;
+}
+
+.cnn-text-gray {
+  color: #666666 !important;
+}
+
+.cnn-text-gray-light {
+  color: #999999 !important;
+}
+
+.cnn-card {
+  border: 1px solid var(--cnn-border-gray);
+  background: #ffffff;
+}
+
+.cnn-hover:hover {
+  color: var(--cnn-red);
+  border-color: var(--cnn-red);
+}
+
+.cnn-section-header {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #000000;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--cnn-border-gray);
+  margin-bottom: 1rem;
+}
+
+.cnn-headline-xl {
+  font-size: 3rem;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.cnn-headline-lg {
+  font-size: 2.25rem;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.cnn-headline-md {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.cnn-headline-sm {
+  font-size: 1.125rem;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.cnn-body {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+.cnn-caption {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.cnn-meta {
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cnn-section {
+  padding: 2rem 0;
+}
+
+.cnn-dense {
+  padding: 1rem 0;
+}
+
+.cnn-tight {
+  padding: 0.5rem 0;
+}
+
+.cnn-border {
+  border: 1px solid var(--cnn-border-gray);
+}
+
+.cnn-border-top {
+  border-top: 1px solid var(--cnn-border-gray);
+}
+
+.cnn-border-bottom {
+  border-bottom: 1px solid var(--cnn-border-gray);
+}
+
+/* Hide scrollbar for category navigation */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide utility links in navbar - they should only appear in utility bar */
+nav[role="navigation"] div.flex.items-center.gap-3.shrink-0 > div.hidden {
+  display: none !important;
+}
+
+/* Ensure mobile menu button is always clickable */
+button[data-testid="mobile-menu-button"] {
+  pointer-events: auto !important;
+  z-index: 10000 !important;
+  position: relative !important;
+  cursor: pointer !important;
+  touch-action: manipulation !important;
+}
+
+button[data-testid="mobile-menu-button"] svg {
+  pointer-events: none !important;
+}
+
+/* Ensure nothing overlays the button */
+button[data-testid="mobile-menu-button"]::before {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Ensure mobile menu is visible when open */
+#mobile-menu[data-open="true"] {
+  transform: translateX(0) !important;
+  -webkit-transform: translateX(0) !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  display: block !important;
+  opacity: 1 !important;
+}
+
+#mobile-menu[data-open="false"] {
+  transform: translateX(-100%) !important;
+  -webkit-transform: translateX(-100%) !important;
+  pointer-events: none !important;
+}
+
+/* Force mobile menu to be visible on mobile devices */
+@media (max-width: 1023px) {
+  #mobile-menu {
+    display: block !important;
+  }
+}
+
+/* Hide on desktop */
+@media (min-width: 1024px) {
+  #mobile-menu {
+    display: none !important;
+  }
+}
+
+/* CNN-style navbar */
+.cnn-navbar {
+  background-color: #000 !important;
+  border-bottom: 1px solid #333 !important;
+}
+
+/* CNN-style main navbar — white background, black text */
+nav[role="navigation"] {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid #e6e6e6 !important;
+}
+
+.cnn-nav-link {
+  color: #fff !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  padding: 8px 12px !important;
+  transition: color 0.2s ease !important;
+}
+
+.cnn-nav-link:hover {
+  color: #cc0000 !important;
+}
+
+.cnn-nav-link.active {
+  color: #cc0000 !important;
+  border-bottom: 2px solid #cc0000 !important;
+}
+
+.cnn-logo {
+  color: #cc0000 !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+}
+
+.cnn-sign-in-btn {
+  background-color: transparent !important;
+  color: #fff !important;
+  border: 1px solid #fff !important;
+  padding: 6px 16px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  border-radius: 0 !important;
+  transition: all 0.2s ease !important;
+  text-decoration: none !important;
+}
+
+.cnn-sign-in-btn:hover {
+  background-color: #fff !important;
+  color: #000 !important;
+}
+
+.cnn-search-btn {
+  background: none !important;
+  border: none !important;
+  color: #fff !important;
+  padding: 8px !important;
+  cursor: pointer !important;
+  transition: color 0.2s ease !important;
+}
+
+.cnn-search-btn:hover {
+  color: #cc0000 !important;
+}
+
+.cnn-more-dropdown {
+  background-color: #000 !important;
+  border: 1px solid #333 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.cnn-more-dropdown-item {
+  color: #fff !important;
+  padding: 8px 16px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.cnn-more-dropdown-item:hover {
+  background-color: #1a1a1a !important;
+  color: #cc0000 !important;
+}
+
+.cnn-search-input {
+  background-color: #1a1a1a !important;
+  border: 1px solid #333 !important;
+  color: #fff !important;
+  padding: 8px 12px !important;
+  font-size: 14px !important;
+  border-radius: 0 !important;
+}
+
+.cnn-search-input::placeholder {
+  color: #999 !important;
+}
+
+.cnn-search-input:focus {
+  outline: none !important;
+  border-color: #cc0000 !important;
+  box-shadow: 0 0 0 2px rgba(204, 0, 0, 0.2) !important;
+}
+
+.cnn-search-result {
+  color: #fff !important;
+  padding: 8px 16px !important;
+  font-size: 14px !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.cnn-search-result:hover {
+  background-color: #1a1a1a !important;
+  color: #cc0000 !important;
+}
+
+/* CNN Sidebar Links - Override any conflicting styles */
+.cnn-sidebar-link,
+.cnn-sidebar-link *,
+.cnn-sidebar-container li,
+.cnn-sidebar-container li a,
+.cnn-sidebar-container li a:hover,
+.cnn-sidebar-container li a:active,
+.cnn-sidebar-container li a:focus,
+.cnn-sidebar-container li a:visited {
+  background-color: transparent !important;
+  background: transparent !important;
+  background-image: none !important;
+}
+
+.cnn-sidebar-link:hover,
+.cnn-sidebar-container li:hover,
+.cnn-sidebar-container li:hover a {
+  background-color: transparent !important;
+  background: transparent !important;
+  background-image: none !important;
+  color: #CC0000 !important;
+}
+
+.cnn-sidebar-link:active,
+.cnn-sidebar-container li:active,
+.cnn-sidebar-container li:active a {
+  background-color: transparent !important;
+  background: transparent !important;
+  background-image: none !important;
+}
+
+.cnn-sidebar-link:focus,
+.cnn-sidebar-container li:focus,
+.cnn-sidebar-container li:focus a {
+  background-color: transparent !important;
+  background: transparent !important;
+  background-image: none !important;
+  outline: none !important;
+}
+
+.cnn-sidebar-container li[data-active="true"],
+.cnn-sidebar-container li[data-active="true"] a {
+  background-color: transparent !important;
+  background: transparent !important;
+  color: #CC0000 !important;
+}
+
+/* Layout Content Wrapper - CNN Style */
+.layout__content-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #FFFFFF;
+}
+
+.layout-homepage__content-wrapper {
+  background-color: #FFFFFF;
+}
+
+/* Container Ribbon - CNN Style */
+.container_ribbon {
+  width: 100%;
+  background-color: #FFFFFF;
+  border-top: 1px solid #E6E6E6;
+  border-bottom: 1px solid #E6E6E6;
+}
+
+.container_ribbon:first-child {
+  border-top: none;
+}
+
+.container_ribbon:last-child {
+  border-bottom: none;
+}
+
+/* Product Zone - CNN Style */
+.product-zone {
+  width: 100%;
+  background-color: #FFFFFF;
+  position: relative;
+}
+
+.product-zone[data-component-name] {
+  margin: 0;
+  padding: 0;
+}
+
+/* CNN Homepage Section Styling */
+.cnn-section-title {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #000000;
+  margin-bottom: 1.5rem;
+}
+
+.cnn-section-title-bar {
+  width: 4px;
+  height: 24px;
+  background-color: #000000;
+  display: inline-block;
+  margin-right: 12px;
+  vertical-align: middle;
+}
+
+/* CNN Video Duration Badge */
+.cnn-video-duration {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #ffffff;
+  padding: 4px 8px;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* CNN Headline Typography */
+.cnn-headline-main {
+  font-size: 2.5rem;
+  line-height: 1.1;
+  font-weight: 900;
+  color: #000000;
+  letter-spacing: -0.02em;
+}
+
+.cnn-headline-side {
+  font-size: 1rem;
+  line-height: 1.3;
+  font-weight: 800;
+  color: #000000;
+}
+
+.cnn-headline-featured {
+  font-size: 1.125rem;
+  line-height: 1.3;
+  font-weight: 800;
+  color: #000000;
+}
+
+.cnn-headline-category {
+  font-size: 1rem;
+  line-height: 1.3;
+  font-weight: 800;
+  color: #000000;
+}
+
+/* CNN Text Colors */
+.cnn-text-primary {
+  color: #000000;
+}
+
+.cnn-text-secondary {
+  color: #4D4D4D;
+}
+
+.cnn-text-meta {
+  color: #666666;
+  font-size: 0.75rem;
+}
+
+.cnn-text-red {
+  color: #CC0000;
+}
+
+/* CNN Hover States */
+.cnn-hover-red:hover {
+  color: #CC0000;
+}
+
+/* CNN Spacing */
+.cnn-section-spacing {
+  padding: 1.5rem 0;
+  border-top: 1px solid #E6E6E6;
+}
+
+.cnn-grid-gap {
+  gap: 1.5rem;
+}

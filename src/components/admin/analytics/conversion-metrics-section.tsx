@@ -1,0 +1,82 @@
+"use client";
+
+import { ConversionMetrics } from "@/types/stats.types";
+import { ConversionMetricsChart } from "@/components/admin/charts/conversion-metrics-chart";
+import { useLanguage } from "@/providers/LanguageProvider";
+
+interface ConversionMetricsSectionProps {
+  data: ConversionMetrics;
+}
+
+export function ConversionMetricsSection({
+  data,
+}: ConversionMetricsSectionProps) {
+  const { formatNumber } = useLanguage();
+  // Use data directly (it's already ConversionMetrics type)
+  const newsletterSubscriptions = data.newsletterSubscriptions ?? 0;
+  const adClicks = data.adClicks ?? 0;
+  const adImpressions = data.adImpressions ?? 0;
+  const clickThroughRate = data.clickThroughRate ?? 0;
+
+  return (
+    <div className="bg-white rounded-none shadow-none p-4">
+      <h3 className="text-xl font-semibold mb-6 text-gray-900">
+        Conversion Metrics
+      </h3>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div>
+          <h4 className="text-lg font-semibold mb-4 text-gray-900">
+            Metrics Overview
+          </h4>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between p-4 bg-green-50 rounded-none">
+              <span className="text-sm font-medium text-gray-700">
+                Newsletter Subscriptions
+              </span>
+              <span className="text-2xl font-bold text-green-600">
+                {formatNumber(newsletterSubscriptions)}
+              </span>
+            </div>
+            <div className="flex items-center justify-between p-4 bg-blue-50 rounded-none">
+              <span className="text-sm font-medium text-gray-700">
+                Ad Clicks
+              </span>
+              <span className="text-2xl font-bold text-blue-600">
+                {formatNumber(adClicks)}
+              </span>
+            </div>
+            <div className="flex items-center justify-between p-4 bg-purple-50 rounded-none">
+              <span className="text-sm font-medium text-gray-700">
+                Ad Impressions
+              </span>
+              <span className="text-2xl font-bold text-purple-600">
+                {formatNumber(adImpressions)}
+              </span>
+            </div>
+            <div className="flex items-center justify-between p-4 bg-orange-50 rounded-none">
+              <span className="text-sm font-medium text-gray-700">
+                Click-Through Rate (CTR)
+              </span>
+              <span className="text-2xl font-bold text-orange-600">
+                {clickThroughRate.toFixed(2)}%
+              </span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h4 className="text-lg font-semibold mb-4 text-gray-900">
+            Visualization
+          </h4>
+          <ConversionMetricsChart
+            data={{
+              newsletterSubscriptions,
+              adClicks,
+              adImpressions,
+              clickThroughRate,
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}

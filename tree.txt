@@ -1,0 +1,395 @@
+├── app
+│   ├── admin
+│   │   ├── ads
+│   │   │   └── page.tsx
+│   │   ├── analytics
+│   │   │   └── page.tsx
+│   │   ├── audit-logs
+│   │   │   └── page.tsx
+│   │   ├── categories
+│   │   │   └── page.tsx
+│   │   ├── chat
+│   │   │   └── page.tsx
+│   │   ├── dashboard
+│   │   │   └── page.tsx
+│   │   ├── homepage
+│   │   │   └── page.tsx
+│   │   ├── login
+│   │   │   └── page.tsx
+│   │   ├── media
+│   │   │   └── page.tsx
+│   │   ├── news
+│   │   │   └── page.tsx
+│   │   ├── newsletter
+│   │   │   └── page.tsx
+│   │   ├── reports
+│   │   │   └── page.tsx
+│   │   ├── settings
+│   │   │   └── page.tsx
+│   │   ├── transactions
+│   │   │   └── page.tsx
+│   │   ├── users
+│   │   │   └── page.tsx
+│   │   ├── videos
+│   │   │   └── upload
+│   │   │       └── page.tsx
+│   │   └── loading.tsx
+│   ├── admin-login
+│   │   └── page.tsx
+│   ├── advertiser
+│   │   ├── ads
+│   │   │   ├── [id]
+│   │   │   ├── create
+│   │   │   │   └── page.tsx
+│   │   │   └── page.tsx
+│   │   ├── analytics
+│   │   │   └── page.tsx
+│   │   ├── dashboard
+│   │   │   └── page.tsx
+│   │   ├── payment
+│   │   │   ├── failure
+│   │   │   │   └── page.tsx
+│   │   │   └── success
+│   │   │       └── page.tsx
+│   │   ├── transactions
+│   │   │   └── page.tsx
+│   │   └── loading.tsx
+│   ├── api
+│   │   └── image-proxy
+│   ├── bookmarks
+│   │   └── page.tsx
+│   ├── category
+│   │   └── [slug]
+│   ├── dashboard
+│   │   ├── chat
+│   │   │   └── page.tsx
+│   │   └── page.tsx
+│   ├── editor
+│   │   └── page.tsx
+│   ├── forgot-password
+│   │   └── page.tsx
+│   ├── horoscope
+│   │   ├── [sign]
+│   │   ├── horoscope-client.tsx
+│   │   └── page.tsx
+│   ├── login
+│   │   └── page.tsx
+│   ├── news
+│   │   └── [id]
+│   ├── newsletter
+│   │   └── unsubscribe
+│   │       └── page.tsx
+│   ├── profile
+│   │   └── page.tsx
+│   ├── register
+│   │   ├── plans
+│   │   │   └── page.tsx
+│   │   └── page.tsx
+│   ├── report
+│   │   └── page.tsx
+│   ├── reset-password
+│   │   └── page.tsx
+│   ├── search
+│   │   ├── loading.tsx
+│   │   └── page.tsx
+│   ├── tg
+│   │   ├── videos
+│   │   │   └── [id]
+│   │   └── page.tsx
+│   ├── transport
+│   │   ├── page.tsx
+│   │   └── transport-client.tsx
+│   ├── verify-email
+│   │   ├── check
+│   │   │   └── page.tsx
+│   │   └── page.tsx
+│   ├── weather
+│   │   ├── page.tsx
+│   │   └── weather-client.tsx
+│   ├── error.tsx
+│   ├── favicon.ico
+│   ├── globals.css
+│   ├── loading.tsx
+│   ├── not-found.tsx
+│   ├── page.tsx
+│   ├── robots.ts
+│   └── sitemap.ts
+├── public
+│   ├── file.svg
+│   ├── globe.svg
+│   ├── next.svg
+│   ├── vercel.svg
+│   └── window.svg
+├── src
+│   ├── components
+│   │   ├── admin
+│   │   │   ├── analytics
+│   │   │   │   ├── activity-timeline-section.tsx
+│   │   │   │   ├── category-performance-section.tsx
+│   │   │   │   ├── conversion-metrics-section.tsx
+│   │   │   │   ├── export-modal.tsx
+│   │   │   │   ├── hourly-patterns-section.tsx
+│   │   │   │   ├── news-popularity-section.tsx
+│   │   │   │   ├── overview-stats.tsx
+│   │   │   │   ├── top-performers-section.tsx
+│   │   │   │   ├── trends-section.tsx
+│   │   │   │   └── user-engagement-section.tsx
+│   │   │   ├── audit-logs
+│   │   │   │   ├── audit-log-filters.tsx
+│   │   │   │   └── audit-log-table.tsx
+│   │   │   ├── charts
+│   │   │   │   ├── activity-timeline.tsx
+│   │   │   │   ├── category-distribution-chart.tsx
+│   │   │   │   ├── conversion-metrics-chart.tsx
+│   │   │   │   ├── engagement-chart.tsx
+│   │   │   │   ├── hourly-patterns-chart.tsx
+│   │   │   │   ├── news-popularity-chart.tsx
+│   │   │   │   ├── revenue-chart.tsx
+│   │   │   │   └── views-chart.tsx
+│   │   │   ├── homepage
+│   │   │   │   └── section-form-modal.tsx
+│   │   │   ├── newsletter
+│   │   │   │   ├── newsletter-stats.tsx
+│   │   │   │   ├── send-newsletter-confirm-modal.tsx
+│   │   │   │   ├── send-newsletter-form.tsx
+│   │   │   │   ├── subscriber-actions.tsx
+│   │   │   │   └── subscriber-list.tsx
+│   │   │   ├── reports
+│   │   │   │   ├── report-detail-modal.tsx
+│   │   │   │   └── reports-list.tsx
+│   │   │   ├── ad-form-modal.tsx
+│   │   │   ├── admin-navbar.tsx
+│   │   │   ├── category-drag-list.tsx
+│   │   │   ├── category-form-modal.tsx
+│   │   │   ├── dashboard-charts.tsx
+│   │   │   ├── delete-confirm-modal.tsx
+│   │   │   ├── media-grid.tsx
+│   │   │   ├── media-item.tsx
+│   │   │   ├── media-library-modal.tsx
+│   │   │   ├── media-upload.tsx
+│   │   │   ├── news-form-modal.tsx
+│   │   │   ├── news-preview-modal.tsx
+│   │   │   ├── quick-actions-panel.tsx
+│   │   │   ├── reset-password-modal.tsx
+│   │   │   ├── rich-text-editor.tsx
+│   │   │   ├── sidebar.tsx
+│   │   │   ├── social-post-preview.tsx
+│   │   │   ├── social-post-results.tsx
+│   │   │   ├── stats-card.tsx
+│   │   │   ├── user-form-modal.tsx
+│   │   │   ├── video-metadata-form.tsx
+│   │   │   ├── video-upload-progress.tsx
+│   │   │   └── video-upload.tsx
+│   │   ├── ads
+│   │   │   ├── ad-display.tsx
+│   │   │   ├── ad-slot.tsx
+│   │   │   └── sticky-header-ad.tsx
+│   │   ├── advertiser
+│   │   │   ├── wizard-steps
+│   │   │   │   ├── creative-step.tsx
+│   │   │   │   ├── details-step.tsx
+│   │   │   │   ├── payment-step.tsx
+│   │   │   │   └── placement-step.tsx
+│   │   │   ├── ad-analytics-detail.tsx
+│   │   │   ├── ad-creation-wizard.tsx
+│   │   │   ├── advertiser-navbar.tsx
+│   │   │   ├── advertiser-sidebar.tsx
+│   │   │   ├── analytics-charts.tsx
+│   │   │   ├── dashboard-charts.tsx
+│   │   │   ├── date-range-filter.tsx
+│   │   │   └── recent-transactions.tsx
+│   │   ├── analytics
+│   │   │   └── behavior-tracker.tsx
+│   │   ├── bookmarks
+│   │   │   └── bookmark-button.tsx
+│   │   ├── category
+│   │   │   ├── category-client.tsx
+│   │   │   └── related-categories.tsx
+│   │   ├── chat
+│   │   │   ├── chat-window.tsx
+│   │   │   ├── conversation-list.tsx
+│   │   │   └── user-list.tsx
+│   │   ├── home
+│   │   │   ├── sections
+│   │   │   │   ├── category-blocks.tsx
+│   │   │   │   ├── featured-grid.tsx
+│   │   │   │   └── hero-section.tsx
+│   │   │   ├── home-client.tsx
+│   │   │   └── homepage-sections.tsx
+│   │   ├── horoscope
+│   │   │   ├── horoscope-card.tsx
+│   │   │   ├── horoscope-share.tsx
+│   │   │   ├── sign-detail.tsx
+│   │   │   └── sign-info.tsx
+│   │   ├── news
+│   │   │   ├── cnn-news-card.tsx
+│   │   │   ├── image-gallery.tsx
+│   │   │   ├── most-read-sidebar.tsx
+│   │   │   ├── news-detail-client.tsx
+│   │   │   ├── social-share-buttons.tsx
+│   │   │   └── trending-articles.tsx
+│   │   ├── newsletter
+│   │   │   └── subscription-form.tsx
+│   │   ├── notifications
+│   │   │   ├── breaking-news-alert.tsx
+│   │   │   ├── breaking-news-manager.tsx
+│   │   │   └── breaking-news-toast.tsx
+│   │   ├── profile
+│   │   │   ├── password-form.tsx
+│   │   │   └── profile-form.tsx
+│   │   ├── reports
+│   │   │   └── report-form.tsx
+│   │   ├── search
+│   │   │   └── search-filters.tsx
+│   │   ├── seo
+│   │   │   └── StructuredData.tsx
+│   │   ├── tg
+│   │   │   ├── featured-video-section.tsx
+│   │   │   ├── latest-videos-carousel.tsx
+│   │   │   ├── video-card.tsx
+│   │   │   └── video-grid.tsx
+│   │   ├── transport
+│   │   │   ├── schedule-table.tsx
+│   │   │   └── transport-card.tsx
+│   │   ├── ui
+│   │   │   ├── navbar
+│   │   │   │   ├── category-dropdown.tsx
+│   │   │   │   ├── category-nav.tsx
+│   │   │   │   ├── mobile-menu.tsx
+│   │   │   │   ├── search-dropdown.tsx
+│   │   │   │   ├── user-menu.tsx
+│   │   │   │   ├── utility-bar.tsx
+│   │   │   │   └── utility-links-dropdown.tsx
+│   │   │   ├── category-menu.tsx
+│   │   │   ├── cnn-headlines-section.tsx
+│   │   │   ├── error-message.tsx
+│   │   │   ├── footer.tsx
+│   │   │   ├── form-field.tsx
+│   │   │   ├── form-modal.tsx
+│   │   │   ├── hero-slider.tsx
+│   │   │   ├── language-switcher.tsx
+│   │   │   ├── loading.tsx
+│   │   │   ├── navbar.tsx
+│   │   │   ├── news-card.tsx
+│   │   │   ├── optimized-image.tsx
+│   │   │   ├── toast.tsx
+│   │   │   ├── trending-bar.tsx
+│   │   │   └── video-player.tsx
+│   │   └── weather
+│   │       ├── city-selector.tsx
+│   │       ├── weather-card.tsx
+│   │       └── weather-widget.tsx
+│   ├── lib
+│   │   ├── api
+│   │   │   ├── modules
+│   │   │   │   ├── ads.api.ts
+│   │   │   │   ├── analytics.api.ts
+│   │   │   │   ├── audit-logs.api.ts
+│   │   │   │   ├── auth.api.ts
+│   │   │   │   ├── bookmarks.api.ts
+│   │   │   │   ├── categories.api.ts
+│   │   │   │   ├── chat.api.ts
+│   │   │   │   ├── config.api.ts
+│   │   │   │   ├── export.api.ts
+│   │   │   │   ├── homepage.api.ts
+│   │   │   │   ├── horoscope.api.ts
+│   │   │   │   ├── media.api.ts
+│   │   │   │   ├── news.api.ts
+│   │   │   │   ├── newsletter.api.ts
+│   │   │   │   ├── payment.api.ts
+│   │   │   │   ├── reports.api.ts
+│   │   │   │   ├── search.api.ts
+│   │   │   │   ├── seo.api.ts
+│   │   │   │   ├── social.api.ts
+│   │   │   │   ├── stats.api.ts
+│   │   │   │   ├── tg.api.ts
+│   │   │   │   ├── transport.api.ts
+│   │   │   │   ├── users.api.ts
+│   │   │   │   ├── video-upload.api.ts
+│   │   │   │   └── weather.api.ts
+│   │   │   ├── apiClient.ts
+│   │   │   ├── apiConfig.ts
+│   │   │   ├── index.ts
+│   │   │   └── server-api.ts
+│   │   ├── helpers
+│   │   │   ├── ad-pricing.ts
+│   │   │   ├── ad-rotation.ts
+│   │   │   ├── category-helpers.ts
+│   │   │   ├── cn.ts
+│   │   │   ├── errorHandler.ts
+│   │   │   ├── export.ts
+│   │   │   ├── form-validation.ts
+│   │   │   ├── formatDate.ts
+│   │   │   ├── metadataMapper.ts
+│   │   │   ├── navbar-helpers.ts
+│   │   │   ├── slugify.ts
+│   │   │   ├── storage.ts
+│   │   │   └── weather-icons.ts
+│   │   ├── hooks
+│   │   │   ├── useAds.ts
+│   │   │   ├── useAnalytics.ts
+│   │   │   ├── useAuditLogs.ts
+│   │   │   ├── useAuth.ts
+│   │   │   ├── useBehaviorTracking.ts
+│   │   │   ├── useBookmarks.ts
+│   │   │   ├── useBreakingNews.ts
+│   │   │   ├── useCategories.ts
+│   │   │   ├── useChat.ts
+│   │   │   ├── useConfig.ts
+│   │   │   ├── useHomepage.ts
+│   │   │   ├── useHoroscope.ts
+│   │   │   ├── useMedia.ts
+│   │   │   ├── useNews.ts
+│   │   │   ├── useNewsletter.ts
+│   │   │   ├── useNewsletterAdmin.ts
+│   │   │   ├── usePayment.ts
+│   │   │   ├── useReports.ts
+│   │   │   ├── useSearch.ts
+│   │   │   ├── useSocial.ts
+│   │   │   ├── useStats.ts
+│   │   │   ├── useStripe.ts
+│   │   │   ├── useTG.ts
+│   │   │   ├── useTransport.ts
+│   │   │   ├── useUser.ts
+│   │   │   ├── useVideoUpload.ts
+│   │   │   └── useWeather.ts
+│   │   ├── i18n
+│   │   │   └── translations.ts
+│   │   └── services
+│   │       └── push-notifications.ts
+│   ├── providers
+│   │   ├── AuthProvider.tsx
+│   │   ├── LanguageProvider.tsx
+│   │   └── QueryProvider.tsx
+│   └── types
+│       ├── ads.types.ts
+│       ├── analytics.types.ts
+│       ├── api.types.ts
+│       ├── audit-log.types.ts
+│       ├── category.types.ts
+│       ├── chat.types.ts
+│       ├── horoscope.types.ts
+│       ├── media.types.ts
+│       ├── news.types.ts
+│       ├── newsletter.types.ts
+│       ├── report.types.ts
+│       ├── seo.types.ts
+│       ├── social.types.ts
+│       ├── stats.types.ts
+│       ├── transaction.types.ts
+│       ├── transport.types.ts
+│       ├── user.types.ts
+│       ├── video.types.ts
+│       └── weather.types.ts
+├── eslint.config.mjs
+├── frontend.pending.md
+├── frontend.progress.md
+├── next-env.d.ts
+├── next.config.ts
+├── package-lock.json
+├── package.json
+├── postcss.config.mjs
+├── pwsh.ps1
+├── README.md
+├── tree.txt
+└── tsconfig.json
