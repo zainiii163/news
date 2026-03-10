@@ -4,7 +4,7 @@ import { memo, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { News } from "@/types/news.types";
-import { OptimizedImage } from "@/components/ui/optimized-image";
+import { HeroArticleImage, NewsCardImage, CompactCardImage, HorizontalCardImage } from "@/components/ui/standardized-images";
 import { formatDate, formatRelativeTime } from "@/lib/helpers/formatDate";
 import { cn } from "@/lib/helpers/cn";
 import { getImageUrl } from "@/lib/helpers/imageUrl";
@@ -62,13 +62,11 @@ export const HeroCard = memo(function HeroCard({ news, className }: BaseCardProp
               </div>
             ) : (
               <div className="relative w-full h-full">
-                <OptimizedImage
+                <HeroArticleImage
                   src={getImageUrl(news.mainImage)}
                   alt={news.title}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="group-hover:scale-105 transition-transform duration-300"
                   priority
-                  loading="eager"
                   quality={85}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                 />
@@ -151,12 +149,10 @@ export const CompactCard = memo(function CompactCard({ news, className }: BaseCa
                 </div>
               </div>
             ) : (
-              <OptimizedImage
+              <CompactCardImage
                 src={getImageUrl(news.mainImage)}
                 alt={news.title}
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-300"
-                loading="lazy"
+                className="group-hover:scale-105 transition-transform duration-300"
                 quality={75}
                 sizes="(max-width: 768px) 100vw, 80px"
               />
@@ -249,11 +245,10 @@ export const GridCard = memo(function GridCard({ news, className }: BaseCardProp
               </div>
             </div>
           ) : (
-            <OptimizedImage
+            <NewsCardImage
               src={getImageUrl(news.mainImage)}
               alt={news.title}
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
+              className="group-hover:scale-105 transition-transform duration-300"
             />
           )
         ) : (
@@ -327,12 +322,10 @@ export const HorizontalCard = memo(function HorizontalCard({ news, className }: 
                 </div>
               </div>
             ) : (
-              <OptimizedImage
+              <HorizontalCardImage
                 src={getImageUrl(news.mainImage)}
                 alt={news.title}
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-300"
-                loading="lazy"
+                className="group-hover:scale-105 transition-transform duration-300"
                 quality={75}
                 sizes="(max-width: 768px) 100vw, 200px"
               />
@@ -411,11 +404,10 @@ export const SmallVerticalCard = memo(function SmallVerticalCard({ news, classNa
               </div>
             </div>
           ) : (
-            <OptimizedImage
+            <NewsCardImage
               src={getImageUrl(news.mainImage)}
               alt={news.title}
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
+              className="group-hover:scale-105 transition-transform duration-300"
             />
           )
         ) : (

@@ -119,12 +119,6 @@ body {
   color: #666;
 }
 
-/* CNN Global Design System */
-* {
-  border-radius: 0 !important;
-  box-shadow: none !important;
-}
-
 /* CNN Color System */
 .cnn-red-accent {
   color: #cc0000 !important;

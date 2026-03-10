@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { OptimizedImage } from "@/components/ui/optimized-image";
+import { SidebarImage } from "@/components/ui/standardized-images";
 import { useNewsPopularity } from "@/lib/hooks/useStats";
 import { useLanguage } from "@/providers/LanguageProvider";
 import { Loading } from "@/components/ui/loading";
@@ -45,11 +45,10 @@ export function MostReadSidebar() {
               {(() => {
                 const mainImage = (item as any & { mainImage?: string }).mainImage;
                 return mainImage && mainImage.trim() !== "" ? (
-                  <OptimizedImage
+                  <SidebarImage
                     src={mainImage}
                     alt={item.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="group-hover:scale-105 transition-transform duration-300"
                   />
                 ) : (
                   <div className="w-full h-full bg-gray-200"></div>

@@ -253,7 +253,7 @@ export function StickyHeaderAd() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        minHeight: "150px",
+        minHeight: "290px",
       }}
     >
       <div
@@ -288,25 +288,173 @@ export function StickyHeaderAd() {
           // Show actual ad
           <CnnAdDisplay ad={ad} slotId="ad_bnr_atf_01" />
         ) : (
-          // Show placeholder when no ads available
+          // Show CNN-style default banner when no ads available
           <div
             style={{
               width: "970px",
-              height: "90px",
+              height: "250px",
               maxWidth: "100%",
-              backgroundColor: "#1a1a1a",
+              backgroundColor: "#000000",
+              overflow: "hidden",
+              margin: "0 auto",
               display: "flex",
-              flexDirection: "column",
               alignItems: "center",
-              justifyContent: "center",
-              color: "#666",
-              fontSize: "14px",
-              gap: "8px",
+              position: "relative",
             }}
           >
-            <div>Advertisement</div>
-            <div style={{ fontSize: "12px", opacity: 0.7 }}>
-              Ad space available - 970x90
+            {/* CNN Logo and Style text */}
+            <div
+              style={{
+                position: "absolute",
+                left: "20px",
+                top: "15px",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+              }}
+            >
+              <div
+                style={{
+                  backgroundColor: "#FF0000",
+                  color: "#FFFFFF",
+                  fontWeight: "bold",
+                  fontSize: "18px",
+                  padding: "2px 6px",
+                  fontFamily: "Arial, sans-serif",
+                }}
+              >
+                CNN
+              </div>
+              <div
+                style={{
+                  color: "#FFFFFF",
+                  fontSize: "14px",
+                  fontWeight: "normal",
+                  fontFamily: "Arial, sans-serif",
+                }}
+              >
+                style
+              </div>
+            </div>
+
+            {/* Advertisement text */}
+            <div
+              style={{
+                position: "absolute",
+                left: "20px",
+                bottom: "12px",
+                color: "#999999",
+                fontSize: "10px",
+                fontFamily: "Arial, sans-serif",
+                textTransform: "uppercase",
+              }}
+            >
+              Advertisement
+            </div>
+
+            {/* Main content area */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
+                paddingLeft: "120px",
+                paddingRight: "20px",
+              }}
+            >
+              {/* Image placeholder */}
+              <div
+                style={{
+                  width: "200px",
+                  height: "180px",
+                  backgroundColor: "#FFD700",
+                  backgroundImage: "linear-gradient(135deg, #FFD700 0%, #FF6B6B 100%)",
+                  borderRadius: "4px",
+                  marginRight: "30px",
+                  position: "relative",
+                  overflow: "hidden",
+                }}
+              >
+                {/* Silhouette figures */}
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: "0",
+                    left: "20px",
+                    width: "50px",
+                    height: "120px",
+                    backgroundColor: "#000000",
+                    borderRadius: "25px 25px 0 0",
+                  }}
+                />
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: "0",
+                    left: "90px",
+                    width: "45px",
+                    height: "110px",
+                    backgroundColor: "#000000",
+                    borderRadius: "22px 22px 0 0",
+                  }}
+                />
+              </div>
+
+              {/* Text content */}
+              <div
+                style={{
+                  flex: 1,
+                  color: "#FFFFFF",
+                  fontFamily: "Arial, sans-serif",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "24px",
+                    fontWeight: "bold",
+                    marginBottom: "8px",
+                    lineHeight: "1.2",
+                  }}
+                >
+                  The global view on style & culture
+                </div>
+              </div>
+
+              {/* CTA Button */}
+              <div
+                style={{
+                  backgroundColor: "#FF0000",
+                  color: "#FFFFFF",
+                  padding: "12px 24px",
+                  borderRadius: "6px",
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  fontFamily: "Arial, sans-serif",
+                  transition: "background-color 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#CC0000";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "#FF0000";
+                }}
+              >
+                {/* Play icon */}
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  style={{ marginLeft: "2px" }}
+                >
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+                INSPIRE ME
+              </div>
             </div>
           </div>
         )}

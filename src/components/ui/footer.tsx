@@ -133,8 +133,17 @@ export function Footer() {
       }
 
       if (!Array.isArray(categories) || categories.length === 0) {
+        // Provide fallback categories for development
         if (process.env.NODE_ENV === "development") {
-          console.warn("Footer - No valid categories found in data structure");
+          console.warn("Footer - No valid categories found in data structure, using fallback");
+          return [
+            { id: "1", nameEn: "US", nameIt: "USA", slug: "us", order: 1, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+            { id: "2", nameEn: "World", nameIt: "Mondo", slug: "world", order: 2, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+            { id: "3", nameEn: "Politics", nameIt: "Politica", slug: "politics", order: 3, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+            { id: "4", nameEn: "Business", nameIt: "Economia", slug: "business", order: 4, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+            { id: "5", nameEn: "Technology", nameIt: "Tecnologia", slug: "technology", order: 5, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+            { id: "6", nameEn: "Sports", nameIt: "Sport", slug: "sports", order: 6, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+          ] as Category[];
         }
         return [];
       }

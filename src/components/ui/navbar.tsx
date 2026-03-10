@@ -5,21 +5,26 @@ import Link from "next/link";
 import { useLanguage } from "@/providers/LanguageProvider";
 import { useAuth } from "@/providers/AuthProvider";
 import { usePathname } from "next/navigation";
+import { AppDownloadDropdown } from "./app-download-dropdown";
+import { UserAccountNav } from "./user-account-nav";
 
 // CNN-style font family (clean Helvetica-like sans-serif)
 const CNN_FONT = '"Helvetica Neue", Helvetica, Arial, sans-serif';
 
-// TG Calabria Menu Items with bilingual support - Updated to match actual category slugs
+// TG Calabria Menu Items with bilingual support - Updated to match CNN navigation structure
 const TG_CALABRIA_MENU_ITEMS = [
-  { nameEn: "Italy | World", nameIt: "Italia | Mondo", href: "/category/italy-world" },
-  { nameEn: "News", nameIt: "Notizie", href: "/news" }, // News links to news listing page
+  { nameEn: "US", nameIt: "USA", href: "/category/us" },
+  { nameEn: "World", nameIt: "Mondo", href: "/category/world" },
   { nameEn: "Politics", nameIt: "Politica", href: "/category/politics" },
-  { nameEn: "Sport", nameIt: "Sport", href: "/category/sport" },
   { nameEn: "Business", nameIt: "Economia", href: "/category/business" },
+  { nameEn: "Health", nameIt: "Salute", href: "/category/health" },
+  { nameEn: "Entertainment", nameIt: "Intrattenimento", href: "/category/entertainment" },
+  { nameEn: "Style", nameIt: "Stile", href: "/category/style" },
+  { nameEn: "Travel", nameIt: "Viaggi", href: "/category/travel" },
   // More section items
-  { nameEn: "Entertainment, Culture and Lifestyle", nameIt: "Intrattenimento, Cultura e Stile di Vita", href: "/category/entertainment" },
-  { nameEn: "Health and Science", nameIt: "Salute e Scienza", href: "/category/health-science" },
-  { nameEn: "Technology and Digital Media", nameIt: "Tecnologia e Media Digitali", href: "/category/technology" },
+  { nameEn: "Sports", nameIt: "Sport", href: "/category/sport" },
+  { nameEn: "Technology", nameIt: "Tecnologia", href: "/category/technology" },
+  { nameEn: "Science", nameIt: "Scienza", href: "/category/science" },
 ];
 
 export function Navbar() {
@@ -38,7 +43,7 @@ export function Navbar() {
   }, []);
 
   // Max items visible in main nav (rest go into "More" dropdown like CNN)
-  const MAX_VISIBLE = 5; // Show first 5 items, rest in "More" dropdown
+  const MAX_VISIBLE = 8; // Show first 8 items like CNN, rest in "More" dropdown
   const visibleItems = TG_CALABRIA_MENU_ITEMS.slice(0, MAX_VISIBLE);
   const moreItems = TG_CALABRIA_MENU_ITEMS.slice(MAX_VISIBLE);
 
@@ -90,12 +95,24 @@ export function Navbar() {
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.top = '0';
+      document.body.style.left = '0';
+      document.body.style.right = '0';
     } else {
-      document.body.style.overflow = "";
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
     }
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
     };
   }, [isMobileMenuOpen]);
 
@@ -141,11 +158,14 @@ export function Navbar() {
       <nav
         className="sticky top-0 z-50 w-full"
         role="navigation"
-        aria-label={t("aria.mainNavigation")}
+        aria-label={t("aria.mainNavigation") || "Main navigation"}
         style={{
           backgroundColor: '#ffffff',
           borderBottom: '1px solid #e6e6e6',
           fontFamily: CNN_FONT,
+          position: 'sticky',
+          top: 0,
+          zIndex: 1000,
         }}
       >
         <div className="cnn-container">
@@ -345,8 +365,54 @@ export function Navbar() {
               )}
             </div>
 
-            {/* ── RIGHT: Search · Sign In ── */}
+            {/* ── RIGHT: Watch · Listen · Search · App Download · Sign In ── */}
             <div className="flex items-center shrink-0" style={{ gap: '18px' }}>
+
+              {/* 👁️ Watch */}
+              <button
+                aria-label="Watch"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  color: '#000000',
+                  cursor: 'pointer',
+                  padding: '4px',
+                  transition: 'color 0.15s ease',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.color = '#CC0000')}
+                onMouseLeave={e => (e.currentTarget.style.color = '#000000')}
+              >
+                {/* Watch icon - TV/play button style */}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
+              </button>
+
+              {/* 🎧 Listen */}
+              <button
+                aria-label="Listen"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  color: '#000000',
+                  cursor: 'pointer',
+                  padding: '4px',
+                  transition: 'color 0.15s ease',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.color = '#CC0000')}
+                onMouseLeave={e => (e.currentTarget.style.color = '#000000')}
+              >
+                {/* Listen icon - headphones/podcast style */}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 1a9 9 0 0 0-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7a9 9 0 0 0-9-9z"/>
+                </svg>
+              </button>
 
               {/* 🔍 Search */}
               <button
@@ -371,63 +437,11 @@ export function Navbar() {
                 </svg>
               </button>
 
-              {/* Register / Sign In / Profile */}
-              {!isMounted || authLoading ? null : isAuthenticated ? (
-                <Link
-                  href="/profile"
-                  style={{
-                    fontFamily: CNN_FONT,
-                    fontSize: '15px',
-                    fontWeight: 700,
-                    color: '#000000',
-                    textDecoration: 'none',
-                    whiteSpace: 'nowrap',
-                    transition: 'color 0.15s ease',
-                  }}
-                  onMouseEnter={e => (e.currentTarget.style.color = '#CC0000')}
-                  onMouseLeave={e => (e.currentTarget.style.color = '#000000')}
-                >
-                  Profile
-                </Link>
-              ) : (
-                <>
-                  <Link
-                    href="/register"
-                    style={{
-                      fontFamily: CNN_FONT,
-                      fontSize: '15px',
-                      fontWeight: 400,
-                      color: '#000000',
-                      textDecoration: 'none',
-                      whiteSpace: 'nowrap',
-                      transition: 'color 0.15s ease',
-                    }}
-                    onMouseEnter={e => (e.currentTarget.style.color = '#CC0000')}
-                    onMouseLeave={e => (e.currentTarget.style.color = '#000000')}
-                  >
-                    {t("nav.register") || "Register"}
-                  </Link>
-                  <Link
-                    href="/login"
-                    style={{
-                      fontFamily: CNN_FONT,
-                      fontSize: '15px',
-                      fontWeight: 700,
-                      color: '#ffffff',
-                      backgroundColor: '#CC0000',
-                      textDecoration: 'none',
-                      whiteSpace: 'nowrap',
-                      padding: '6px 16px',
-                      borderRadius: '4px',
-                      transition: 'background-color 0.15s ease',
-                    }}
-                    onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#B30000')}
-                    onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#CC0000')}
-                  >
-                    {t("nav.signIn")}
-                  </Link>
-                </>
-              )}
+              {/* App Download Dropdown */}
+              <AppDownloadDropdown />
+
+              {/* User Account Navigation */}
+              <UserAccountNav />
             </div>
           </div>
         </div>

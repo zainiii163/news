@@ -21,9 +21,8 @@ export function UtilityBar() {
 
   return (
     <div
-      className="bg-white border-b border-gray-300 text-xs"
+      className="sticky top-0 z-40 bg-white border-b border-gray-300 text-xs"
       style={{
-        position: "relative",
         backgroundColor: '#FFFFFF',
         borderBottom: '1px solid #E6E6E6'
       }}

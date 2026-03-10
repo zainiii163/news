@@ -1,10 +1,9 @@
 "use client";
 
 import { News } from "@/types/news.types";
-import { OptimizedImage } from "@/components/ui/optimized-image";
-import { getImageUrl } from "@/lib/helpers/imageUrl";
-import { formatDate, formatRelativeTime } from "@/lib/helpers/formatDate";
-import Link from "next/link";
+import { HeroCard } from "@/components/ui/news-cards";
+import { HorizontalNewsCard } from "@/components/ui/news-cards";
+import { TextNewsLink } from "@/components/ui/news-cards";
 
 interface HeroSectionProps {
   heroStory: News | null;
@@ -19,80 +18,64 @@ export function HeroSection({
 }: HeroSectionProps) {
   return (
     <div className="mb-8">
-      {/* CNN-STYLE FULL-WIDTH DOMINANT HEADLINE */}
-      {heroStory && (
-        <Link
-          href={`/news/${heroStory.slug || heroStory.id}`}
-          className="group block block w-full"
-        >
-          <div className="relative w-full h-[450px] lg:h-[500px] overflow-hidden">
-            {heroStory.mainImage && heroStory.mainImage.trim() !== "" ? (
-              <OptimizedImage
-                src={getImageUrl(heroStory.mainImage)}
-                alt={heroStory.title}
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-700"
-                priority
-                loading="eager"
-                quality={90}
-                sizes="100vw"
-              />
-            ) : (
-              <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                <p className="text-lg text-gray-500">Image not available</p>
-              </div>
-            )}
-            
-            {/* CNN-STYLE OVERLAY HEADLINE - BOTTOM LEFT */}
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 lg:p-8">
-              <div className="max-w-7xl mx-auto">
-                <h1 className="text-3xl lg:text-5xl xl:text-6xl font-black text-white mb-3 leading-tight tracking-tight">
-                  {heroStory.title}
-                </h1>
-                {heroStory.summary && (
-                  <p className="text-white/95 text-base lg:text-lg line-clamp-3 leading-relaxed max-w-4xl">
-                    {heroStory.summary}
-                  </p>
-                )}
-              </div>
+      {/* CNN-STYLE 3-COLUMN HERO LAYOUT: 1fr 2fr 1fr */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* LEFT COLUMN - SUPPORTING STORIES */}
+        <div className="lg:col-span-3 space-y-4">
+          <h3 className="text-lg font-black text-gray-900 uppercase tracking-wide mb-4">
+            Top Stories
+          </h3>
+          {leftColumnStories.slice(0, 6).map((story) => (
+            <HorizontalNewsCard
+              key={story.id}
+              story={story}
+              imageSize="medium"
+              showCategory={false}
+            />
+          ))}
+        </div>
+
+        {/* CENTER COLUMN - HERO ARTICLE */}
+        <div className="lg:col-span-6">
+          {heroStory && (
+            <HeroCard story={heroStory} priority={true} />
+          )}
+        </div>
+
+        {/* RIGHT COLUMN - TRENDING + LATEST NEWS */}
+        <div className="lg:col-span-3 space-y-6">
+          <div>
+            <h3 className="text-lg font-black text-gray-900 uppercase tracking-wide mb-4">
+              Trending
+            </h3>
+            <div className="space-y-3">
+              {rightColumnStories.slice(0, 4).map((story) => (
+                <TextNewsLink
+                  key={story.id}
+                  story={story}
+                  showBullet={true}
+                  size="small"
+                />
+              ))}
             </div>
           </div>
-        </Link>
-      )}
-
-      {/* SECONDARY STORIES - FULL-WIDTH ROW */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-        {/* Left column stories */}
-        {leftColumnStories.slice(0, 2).map((story) => (
-          <Link
-            key={story.id}
-            href={`/news/${story.slug || story.id}`}
-            className="group block border-l-4 border-transparent hover:border-red-600 pl-4 transition-colors"
-          >
-            <h3 className="text-lg lg:text-xl font-bold text-gray-900 group-hover:text-red-600 transition-colors line-clamp-3 leading-tight mb-2">
-              {story.title}
+          
+          <div>
+            <h3 className="text-lg font-black text-gray-900 uppercase tracking-wide mb-4">
+              Latest
             </h3>
-            <p className="text-sm text-gray-500">
-              {formatRelativeTime(story.createdAt)}
-            </p>
-          </Link>
-        ))}
-        
-        {/* Right column stories */}
-        {rightColumnStories.slice(0, 2).map((story) => (
-          <Link
-            key={story.id}
-            href={`/news/${story.slug || story.id}`}
-            className="group block border-l-4 border-transparent hover:border-red-600 pl-4 transition-colors"
-          >
-            <h3 className="text-lg lg:text-xl font-bold text-gray-900 group-hover:text-red-600 transition-colors line-clamp-3 leading-tight mb-2">
-              {story.title}
-            </h3>
-            <p className="text-sm text-gray-500">
-              {formatRelativeTime(story.createdAt)}
-            </p>
-          </Link>
-        ))}
+            <div className="space-y-3">
+              {rightColumnStories.slice(4, 8).map((story) => (
+                <TextNewsLink
+                  key={story.id}
+                  story={story}
+                  showBullet={false}
+                  size="small"
+                />
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

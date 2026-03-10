@@ -175,6 +175,11 @@ const nextConfig: NextConfig = {
     qualities: [75, 85, 90],
     // Minimum quality for optimized images
     minimumCacheTTL: isDev ? 60 : 3600, // Shorter cache in dev, longer in production
+    // Add timeout for external images
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    // In development, use unoptimized for external images to avoid timeout
+    unoptimized: isDev,
     // CDN configuration (if CDN_URL is set in environment)
     ...(process.env.NEXT_PUBLIC_CDN_URL && {
       loader: "custom",

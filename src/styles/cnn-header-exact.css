@@ -1,0 +1,556 @@
+/* CNN Header Exact Styles - Matching CNN.com perfectly */
+
+/* Header wrapper styles - exact CNN positioning */
+.header__wrapper-outer {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 316px;
+  margin-bottom: 0px;
+}
+
+.header__wrapper-inner {
+  position: relative;
+}
+
+/* Main header navigation */
+.header {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e6e6e6;
+  font-family: "CNN", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  position: relative;
+  z-index: 999;
+}
+
+/* Ad slot header styles */
+.ad-slot-header__wrapper {
+  position: relative;
+}
+
+.ad-slot-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #000000;
+  border-bottom: 1px solid #333333;
+  z-index: 100;
+}
+
+.ad-slot-header__container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+}
+
+/* Ad feedback styles */
+.ad-feedback-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: #666666;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 2px;
+  transition: background-color 0.15s ease;
+}
+
+.ad-feedback-link:hover {
+  background-color: #f5f5f5;
+}
+
+.ad-slot__feedback {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.ad-slot__ad-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #666666;
+}
+
+/* User account navigation styles */
+.user-account-nav {
+  visibility: visible;
+}
+
+.user-account-nav__icons {
+  display: flex;
+  align-items: center;
+}
+
+.user-account-nav__icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.user-account-nav__icon-button:hover {
+  background-color: #e0e0e0;
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  padding: 0 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+
+.header__subnav-mount {
+  width: 100%;
+}
+
+.header__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  position: relative;
+}
+
+/* Left section */
+.header__left {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+/* Menu icons */
+.header__menu-icon,
+.header__close-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background-color: transparent;
+  border: none;
+  color: #000000;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.15s ease;
+}
+
+.header__menu-icon:hover,
+.header__close-icon:hover {
+  opacity: 0.7;
+}
+
+.header__menu-icon-svg,
+.header__close-icon-svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Logo styles */
+.brand-logo {
+  display: flex;
+  align-items: center;
+}
+
+.brand-logo__logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+
+.brand-logo__logo-link:hover {
+  opacity: 0.8;
+}
+
+.brand-logo__logo {
+  display: flex;
+  align-items: center;
+}
+
+.brand-logo__icon {
+  flex-shrink: 0;
+}
+
+/* Navigation */
+.header__nav {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  visibility: visible;
+}
+
+.header__nav-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.header__nav-item {
+  display: block;
+}
+
+.header__nav-item-link {
+  font-family: "CNN", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: #000000;
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 8px 0;
+  transition: color 0.15s ease;
+}
+
+.header__nav-item-link:hover {
+  color: #CC0000;
+}
+
+.header__nav-item-link.active {
+  color: #CC0000;
+}
+
+/* More dropdown */
+.header__nav-more {
+  position: relative;
+  display: block;
+}
+
+.header__nav-more-link,
+.header__nav-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: "CNN", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: #000000;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  padding: 8px 0;
+  transition: color 0.15s ease;
+}
+
+.header__nav-more-link:hover,
+.header__nav-button:hover {
+  color: #CC0000;
+}
+
+.header__nav-more--toggle-caret {
+  font-size: 15px;
+}
+
+.header__nav-more--toggle-caret-down::after {
+  content: " ▼";
+  font-size: 10px;
+}
+
+.header__nav-more--toggle-caret-up::after {
+  content: " ▲";
+  font-size: 10px;
+}
+
+.header__nav-item-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background-color: #ffffff;
+  border: 1px solid #e6e6e6;
+  min-width: 180px;
+  z-index: 1000;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.header__nav-item-dropdown-inner {
+  padding: 4px 0;
+}
+
+.header__nav-item-dropdown-item {
+  display: block;
+  padding: 10px 18px;
+  font-family: "CNN", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #000000;
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.header__nav-item-dropdown-item:hover {
+  background-color: #f5f5f5;
+  color: #CC0000;
+}
+
+.header__nav-item-dropdown-item:last-child {
+  border-bottom: none;
+}
+
+/* Right section */
+.header__right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 16px;
+  visibility: visible;
+}
+
+
+
+/* Action links */
+.header__video-link,
+.header__audio-link {
+  font-family: "CNN", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #000000;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.header__video-link:hover,
+.header__audio-link:hover {
+  color: #CC0000;
+}
+
+
+.header__audio-link--no-margin {
+  margin-right: 0;
+}
+
+/* Search icon */
+.header__search-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background-color: transparent;
+  border: none;
+  color: #000000;
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.15s ease;
+}
+
+.header__search-icon:hover {
+  color: #CC0000;
+}
+
+.header__search-icon-svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Subscribe button */
+.header__subscribe-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #CC0000;
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-family: "CNN", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.header__subscribe-button:hover {
+  background-color: #990000;
+}
+
+
+.subscribe-button--hide {
+  display: none;
+}
+
+/* User account navigation */
+.header__user-account-nav-icon {
+  display: flex;
+  align-items: center;
+}
+
+
+.icon-ui-avatar-default {
+  width: 24px;
+  height: 24px;
+}
+
+/* Mobile menu */
+#mobile-menu {
+  position: fixed;
+  top: 52px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ffffff;
+  border-top: 1px solid #e6e6e6;
+  z-index: 40;
+  overflow-y: auto;
+  font-family: "CNN", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#mobile-menu[data-open="true"] {
+  display: block;
+}
+
+/* Mobile menu links */
+#mobile-menu a {
+  display: block;
+  padding: 13px 16px;
+  font-size: 15px;
+  font-weight: 400;
+  color: #000000;
+  text-decoration: none;
+  border-bottom: 1px solid #eeeeee;
+  transition: color 0.15s ease;
+}
+
+#mobile-menu a:hover {
+  color: #CC0000;
+}
+
+#mobile-menu a.active {
+  color: #CC0000;
+}
+
+/* Utility classes */
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .header__inner {
+    padding: 0 16px;
+  }
+  
+  .header__nav-container {
+    gap: 16px;
+  }
+  
+  .header__right {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header__nav {
+    display: none;
+  }
+  
+  .header__inner {
+    padding: 0 12px;
+  }
+  
+  .header__video-link-desktop,
+  .header__audio-link-desktop {
+    display: none;
+  }
+  
+  .header__subscribe-button {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .header__inner {
+    padding: 0 8px;
+  }
+  
+  .header__left {
+    gap: 8px;
+  }
+  
+  .header__right {
+    gap: 8px;
+  }
+}
+
+/* Animation and transitions */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header__nav-item-dropdown {
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* Focus styles for accessibility */
+.header__menu-icon:focus,
+.header__close-icon:focus,
+.header__search-icon:focus,
+.header__subscribe-button:focus,
+.header__nav-more-link:focus,
+.header__nav-button:focus {
+  outline: 2px solid #CC0000;
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .header {
+    border-bottom-color: #000000;
+  }
+  
+  .header__nav-item-link,
+  .header__video-link,
+  .header__audio-link {
+    color: #000000;
+  }
+  
+  .header__nav-item-link:hover,
+  .header__video-link:hover,
+  .header__audio-link:hover {
+    color: #CC0000;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .header__nav-item-link,
+  .header__video-link,
+  .header__audio-link,
+  .header__search-icon,
+  .header__subscribe-button,
+  .header__nav-more-link,
+  .header__nav-button,
+  .header__nav-item-dropdown-item {
+    transition: none;
+  }
+  
+  .header__nav-item-dropdown {
+    animation: none;
+  }
+}

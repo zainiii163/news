@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CNN-specific styles */
+.cnn-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.container_ribbon {
+  width: 100%;
+  background: #ffffff;
+}
+
+/* CNN Typography */
+.font-black {
+  font-weight: 900;
+}
+
+.text-red-600 {
+  color: #CC0000;
+}
+
+.hover\:text-red-600:hover {
+  color: #CC0000;
+}
+
+/* CNN Card Styles */
+.cnn-card {
+  border-bottom: 1px solid #e6e6e6;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+
+.cnn-card:hover {
+  background-color: #f8f8f8;
+}
+
+/* CNN Headlines */
+.cnn-headline {
+  font-family: 'CNN', sans-serif;
+  font-weight: 900;
+  line-height: 1.2;
+  color: #000;
+}
+
+.cnn-headline:hover {
+  color: #CC0000;
+}
+
+/* CNN Category Labels */
+.cnn-category {
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #CC0000;
+}
+
+/* CNN Timestamps */
+.cnn-timestamp {
+  font-size: 12px;
+  color: #666;
+}
+
+/* Aspect ratio utilities for standardized images */
+@layer utilities {
+  .aspect-w-16 {
+    position: relative;
+    padding-bottom: calc(9 / 16 * 100%);
+  }
+  
+  .aspect-h-9 > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .aspect-w-4 {
+    position: relative;
+    padding-bottom: calc(3 / 4 * 100%);
+  }
+  
+  .aspect-h-3 > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .aspect-w-1 {
+    position: relative;
+    padding-bottom: calc(1 / 1 * 100%);
+  }
+  
+  .aspect-h-1 > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}

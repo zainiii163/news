@@ -49,7 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           .getMe()
           .then((response) => {
             if (response.data) {
-              setUser(response.data);
+              setUser(response.data.data);
             }
           })
           .catch((error) => {

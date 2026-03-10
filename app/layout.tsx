@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "../src/styles/cnn-header.css";
+import "../src/styles/cnn-navbar.css";
+import "../src/styles/cnn-layout.css";
 import { QueryProvider } from "@/providers/QueryProvider";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { LanguageProvider } from "@/providers/LanguageProvider";
@@ -9,11 +12,11 @@ import { BreakingNewsManager } from "@/components/notifications/breaking-news-ma
 import { BehaviorTracker } from "@/components/analytics/behavior-tracker";
 import { AdsWrapper } from "@/components/ads/ads-wrapper";
 import { ErrorBoundary } from "@/components/error-boundary";
-import { Navbar } from "@/components/ui/navbar";
+import { CNNHeaderContainer } from "@/components/ui/cnn-header-container";
 import { UtilityBar } from "@/components/ui/navbar/utility-bar";
-import { BreakingBar } from "@/components/ui/breaking-bar";
 import { MainContent } from "@/components/ui/main-content";
 import { Footer } from "@/components/ui/footer";
+import { MegaFooter } from "@/components/ui/mega-footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -57,12 +60,11 @@ export default function RootLayout({
                     <BreakingNewsManager />
                     <div className="min-h-screen bg-[#FFFFFF]">
                       <UtilityBar />
-                      <Navbar />
-                      <BreakingBar />
+                      <CNNHeaderContainer />
                       <MainContent>
                         {children}
                       </MainContent>
-                      <Footer />
+                      <MegaFooter />
                     </div>
                   </BehaviorTracker>
                 </ToastProvider>

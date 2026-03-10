@@ -39,7 +39,7 @@ export function BreakingBar() {
 
   return (
     <div 
-      className="bg-[#CC0000] text-white relative overflow-hidden w-full"
+      className="sticky top-0 z-30 bg-[#CC0000] text-white relative overflow-hidden w-full"
       style={{ 
         boxShadow: 'none',
         borderRadius: '0'
