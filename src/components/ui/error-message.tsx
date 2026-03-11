@@ -1,0 +1,65 @@
+"use client";
+
+import { handleApiError } from "@/lib/helpers/errorHandler";
+import { useLanguage } from "@/providers/LanguageProvider";
+
+interface ApiError {
+  code?: string;
+  message?: string;
+  status?: number;
+  errors?: unknown;
+}
+
+interface ErrorMessageProps {
+  error: ApiError | Error | string | null | undefined;
+  className?: string;
+}
+
+export function ErrorMessage({ error, className = "" }: ErrorMessageProps) {
+  const { language, t } = useLanguage();
+  
+  if (!error) return null;
+  const errorMessage = handleApiError(error, language);
+  const errorCode =
+    typeof error === "object" && error !== null && "code" in error
+      ? (error as ApiError).code
+      : undefined;
+  const isConnectionError =
+    errorCode === "CONNECTION_REFUSED" || errorCode === "NETWORK_ERROR";
+
+  return (
+    <div
+      className={`bg-red-50 border border-red-200 rounded-none p-4 ${
+        isConnectionError ? "bg-yellow-50 border-yellow-200" : ""
+      } ${className}`}
+    >
+      <div className="flex items-start">
+        <div className="flex-shrink-0">
+          {isConnectionError ? (
+            <span className="text-yellow-600 text-xl">⚠️</span>
+          ) : (
+            <span className="text-red-600 text-xl">❌</span>
+          )}
+        </div>
+        <div className="ml-3 flex-1">
+          <h3
+            className={`text-sm font-medium ${
+              isConnectionError ? "text-yellow-800" : "text-red-800"
+            }`}
+          >
+            {isConnectionError
+              ? t("errors.backendNotRunning")
+              : t("common.error")}
+          </h3>
+          <p
+            className={`mt-1 text-sm ${
+              isConnectionError ? "text-yellow-700" : "text-red-700"
+            }`}
+          >
+            {errorMessage}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
