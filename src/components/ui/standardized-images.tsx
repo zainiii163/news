@@ -23,7 +23,7 @@ export function HeroArticleImage({
 }: StandardizedImageProps) {
   return (
     <div className={cn("relative w-full", className)}>
-      <div className="aspect-w-16 aspect-h-9">
+      <div className="relative w-full aspect-video">
         <OptimizedImage
           src={src}
           alt={alt}
@@ -50,7 +50,7 @@ export function NewsCardImage({
 }: StandardizedImageProps) {
   return (
     <div className={cn("relative w-full", className)}>
-      <div className="aspect-w-4 aspect-h-3">
+      <div className="relative w-full aspect-[4/3]">
         <OptimizedImage
           src={src}
           alt={alt}
@@ -78,7 +78,7 @@ export function SidebarImage({
 }: StandardizedImageProps) {
   return (
     <div className={cn("relative w-full", className)}>
-      <div className="aspect-w-1 aspect-h-1">
+      <div className="relative w-full aspect-square">
         <OptimizedImage
           src={src}
           alt={alt}
@@ -106,7 +106,7 @@ export function FeaturedArticleImage({
 }: StandardizedImageProps) {
   return (
     <div className={cn("relative w-full", className)}>
-      <div className="aspect-w-16 aspect-h-9">
+      <div className="relative w-full aspect-video">
         <OptimizedImage
           src={src}
           alt={alt}
@@ -134,7 +134,7 @@ export function CompactCardImage({
 }: StandardizedImageProps) {
   return (
     <div className={cn("relative w-full", className)}>
-      <div className="aspect-w-1 aspect-h-1">
+      <div className="relative w-full aspect-square">
         <OptimizedImage
           src={src}
           alt={alt}
@@ -162,7 +162,7 @@ export function HorizontalCardImage({
 }: StandardizedImageProps) {
   return (
     <div className={cn("relative w-full", className)}>
-      <div className="aspect-w-16 aspect-h-9">
+      <div className="relative w-full aspect-video">
         <OptimizedImage
           src={src}
           alt={alt}

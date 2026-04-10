@@ -109,6 +109,24 @@ export async function fetchCategories(flat?: boolean): Promise<CategoryResponse>
   }
 }
 
+/** Normalize `/categories/slug/:slug` JSON — some APIs nest `data.data`. */
+function categoryFromSlugPayload(result: unknown): Category | null {
+  if (!result || typeof result !== "object") return null;
+  const r = result as { success?: boolean; data?: unknown };
+  if (r.success === false || r.data == null) return null;
+  const d = r.data;
+  if (d && typeof d === "object" && "slug" in d && "id" in d) {
+    return d as Category;
+  }
+  if (d && typeof d === "object" && "data" in d) {
+    const inner = (d as { data: unknown }).data;
+    if (inner && typeof inner === "object" && "slug" in inner && "id" in inner) {
+      return inner as Category;
+    }
+  }
+  return null;
+}
+
 export async function fetchCategoryBySlug(slug: string): Promise<{ data: Category } | null> {
   try {
     if (!API_CONFIG?.BASE_URL) {
@@ -138,8 +156,9 @@ export async function fetchCategoryBySlug(slug: string): Promise<{ data: Categor
       
       if (response.ok) {
         const result = await response.json();
-        if (result?.success && result?.data) {
-          return { data: result.data };
+        const cat = categoryFromSlugPayload(result);
+        if (cat) {
+          return { data: cat };
         }
       } else if (response.status === 404) {
         // Category not found - return null instead of throwing
@@ -153,8 +172,20 @@ export async function fetchCategoryBySlug(slug: string): Promise<{ data: Categor
     // Fallback: Fetch all categories and search
     try {
       const categories = await fetchCategories(true);
-      const allCategories = categories?.data || [];
-      
+      let allCategories: Category[] = Array.isArray(categories?.data)
+        ? (categories!.data as Category[])
+        : [];
+      if (
+        allCategories.length === 0 &&
+        categories?.data &&
+        typeof categories.data === "object" &&
+        !Array.isArray(categories.data) &&
+        "data" in categories.data &&
+        Array.isArray((categories.data as { data: Category[] }).data)
+      ) {
+        allCategories = (categories.data as { data: Category[] }).data;
+      }
+
       if (!Array.isArray(allCategories) || allCategories.length === 0) {
         console.warn(`No categories found in API response`);
         return null;

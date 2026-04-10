@@ -5,6 +5,7 @@ import { AdSlot } from "@/components/ads/ad-slot";
 import { useCategories } from "@/lib/hooks/useCategories";
 import { Category } from "@/types/category.types";
 import { useState, useMemo } from "react";
+import { categorySectionHref } from "@/lib/helpers/category-routes";
 
 // Social Media Icons Component
 function SocialIcon({ name, href }: { name: string; href?: string }) {
@@ -79,7 +80,7 @@ function SocialIcon({ name, href }: { name: string; href?: string }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-[#999999] hover:text-[#FFFFFF] transition-colors duration-200"
+      className="text-gray-400 hover:text-white transition-colors duration-200"
       aria-label={name}
     >
       {iconContent()}
@@ -106,7 +107,7 @@ const flattenCategories = (cats: Category[] | null | undefined): Category[] => {
 
 export function Footer() {
   const { data: categoriesData, isLoading, error } = useCategories(true);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [email, setEmail] = useState("");
 
   // Memoize categories processing to prevent unnecessary recalculations
   const allCategories = useMemo(() => {
@@ -163,329 +164,185 @@ export function Footer() {
     youtube: process.env.NEXT_PUBLIC_SOCIAL_YOUTUBE,
   };
 
+  const handleNewsletterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email.trim()) {
+      // Handle newsletter subscription
+      console.log("Newsletter subscription:", email);
+      setEmail("");
+    }
+  };
+
   return (
-    <footer className="bg-[#0D0D0D] text-white mt-20">
-      {/* Footer Ad Slot - min height so 2 stacked ads show on mobile */}
-      <div className="cnn-container py-4 bg-[#1a1a1a] min-h-0 overflow-visible">
-        <AdSlot slot="FOOTER" />
-      </div>
-
-      <div className="footer__inner">
-        {/* Search Bar */}
-        <div className="search-bar max-w-2xl mx-auto px-4 py-6">
-          <form 
-            action="/search" 
-            className="search-bar__form relative bg-white rounded-lg overflow-hidden"
-            role="search"
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (searchQuery.trim()) {
-                window.location.href = `/search?q=${encodeURIComponent(searchQuery.trim())}`;
-              }
-            }}
-          >
-            <input 
-              placeholder="Search CNN..." 
-              aria-label="Search" 
-              className="search-bar__input w-full px-4 py-3 pr-12 text-black outline-none"
-              type="text" 
-              autoComplete="off" 
-              name="q"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <button 
-              type="submit" 
-              className="search-bar__submit absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 transition-colors p-1"
-              title="Search"
-              aria-label="Search"
-            >
-              <svg 
-                className="w-5 h-5" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" 
-                />
-              </svg>
-            </button>
-          </form>
+    <div className="layout__bottom layout-no-rail__bottom bg-black text-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Footer Ad Slot */}
+        <div className="py-4 bg-gray-900">
+          <AdSlot slot="FOOTER" />
         </div>
 
-        {/* Mobile Subscribe Button */}
-        <div className="px-4 py-4 md:hidden">
-          <button className="footer__subscribe-button w-full bg-[#c70000] hover:bg-[#ff0000] text-white py-3 px-6 font-bold rounded-lg transition-colors">
-            Subscribe
-          </button>
-        </div>
-
-        <hr className="border-gray-700 my-0" />
-
-        {/* User Account Navigation */}
-        <div className="px-4 py-4">
-          <div className="user-account-nav flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <button className="user-account-nav__icon-button text-white hover:text-[#c70000] transition-colors">
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 20.674a8.654 8.654 0 01-6.483-2.92c.168-.397.523-.758 1.067-1.076 1.334-.782 3.268-1.23 5.305-1.23 2.027 0 3.955.445 5.288 1.22.628.365.998.787 1.125 1.283A8.649 8.649 0 0112 20.674m1.521-7.203c-3.033 1.496-6.04-1.51-4.544-4.543a2.831 2.831 0 011.282-1.282c3.032-1.491 6.035 1.512 4.543 4.543a2.833 2.833 0 01-1.28 1.282m1.69-9.564c2.334.85 4.161 2.752 4.958 5.106.974 2.873.47 5.65-.941 7.773-.307-.486-.765-.912-1.382-1.27-.912-.53-2.054-.922-3.303-1.155a4.642 4.642 0 001.89-4.755 4.567 4.567 0 00-3.745-3.62 4.648 4.648 0 00-5.442 4.574c0 1.571.787 2.96 1.986 3.8-1.258.235-2.407.63-3.323 1.167-.536.314-.953.674-1.256 1.076A8.617 8.617 0 013.326 12c0-5.821 5.765-10.322 11.885-8.093m.112-1.368A10.052 10.052 0 002.539 15.321a9.611 9.611 0 006.138 6.14A10.052 10.052 0 0021.461 8.679a9.611 9.611 0 00-6.138-6.14"/>
-                </svg>
-              </button>
-              <button className="user-account-nav__text-button text-white hover:text-[#c70000] transition-colors font-medium">
-                Sign in
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <hr className="border-gray-700 my-0" />
-
-        {/* Live TV, Audio, Video Links */}
-        <div className="px-4 py-4 flex flex-wrap gap-4 md:hidden">
-          <a href="/live-tv" className="footer__live-tv-link text-white hover:text-[#c70000] transition-colors font-medium">
-            Live TV
-          </a>
-          <a href="/audio" className="footer__audio-link text-white hover:text-[#c70000] transition-colors font-medium">
-            Listen
-          </a>
-          <a href="/watch" className="footer__video-link text-white hover:text-[#c70000] transition-colors font-medium">
-            Watch
-          </a>
-        </div>
-
-        <hr className="border-gray-700 my-0 md:hidden" />
-
-        {/* Footer Subnav - Categories */}
-        <div className="footer__subnav px-4 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-            {/* Logo and Description Section */}
-            <div className="flex flex-col lg:col-span-1">
-              <div className="mb-4">
-                <Link href="/" className="text-[#c70000] font-black text-2xl">
-                  TG CALABRIA
-                </Link>
-                <p className="text-[#999999] text-xs mt-1">Report</p>
+        <footer id="pageFooter" className="footer py-12" data-analytics-aggregate-events="true">
+          <div className="footer__inner">
+            {/* Main Footer Content */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+              
+              {/* TG Calabria Brand */}
+              <div className="lg:col-span-1">
+                <div className="mb-6">
+                  <Link href="/" className="text-red-600 font-black text-2xl mb-2 block">
+                    TG CALABRIA
+                  </Link>
+                  <p className="text-gray-400 text-xs uppercase tracking-wider">Report</p>
+                </div>
+                <p className="text-gray-400 text-sm mb-6">
+                  Your trusted source for news in Calabria. Stay informed with the latest updates from across the region.
+                </p>
+                
+                {/* Social Media */}
+                <div className="flex space-x-4">
+                  {socialLinks.facebook && <SocialIcon name="facebook" href={socialLinks.facebook} />}
+                  {socialLinks.twitter && <SocialIcon name="twitter" href={socialLinks.twitter} />}
+                  {socialLinks.instagram && <SocialIcon name="instagram" href={socialLinks.instagram} />}
+                  {socialLinks.youtube && <SocialIcon name="youtube" href={socialLinks.youtube} />}
+                </div>
               </div>
-              <p className="text-[#999999] text-xs mb-4">
-                Your trusted source for news in Calabria. Stay informed with the latest updates.
+
+              {/* Categories */}
+              <div>
+                <h3 className="text-white font-bold text-lg mb-4">Categories</h3>
+                <ul className="space-y-2">
+                  <li><Link href={categorySectionHref("world")} className="text-gray-400 hover:text-white transition-colors text-sm">World</Link></li>
+                  <li><Link href={categorySectionHref("politics")} className="text-gray-400 hover:text-white transition-colors text-sm">Politics</Link></li>
+                  <li><Link href={categorySectionHref("business")} className="text-gray-400 hover:text-white transition-colors text-sm">Business</Link></li>
+                  <li><Link href={categorySectionHref("sports")} className="text-gray-400 hover:text-white transition-colors text-sm">Sports</Link></li>
+                  <li><Link href={categorySectionHref("entertainment")} className="text-gray-400 hover:text-white transition-colors text-sm">Entertainment</Link></li>
+                  <li><Link href={categorySectionHref("technology")} className="text-gray-400 hover:text-white transition-colors text-sm">Technology</Link></li>
+                  <li><Link href={categorySectionHref("health")} className="text-gray-400 hover:text-white transition-colors text-sm">Health</Link></li>
+                  <li><Link href={categorySectionHref("style")} className="text-gray-400 hover:text-white transition-colors text-sm">Style</Link></li>
+                  <li><Link href={categorySectionHref("travel")} className="text-gray-400 hover:text-white transition-colors text-sm">Travel</Link></li>
+                </ul>
+              </div>
+
+              {/* Services */}
+              <div>
+                <h3 className="text-white font-bold text-lg mb-4">Services</h3>
+                <ul className="space-y-2">
+                  <li><Link href="/live-tv" className="text-gray-400 hover:text-white transition-colors text-sm">Live TV</Link></li>
+                  <li><Link href="/audio" className="text-gray-400 hover:text-white transition-colors text-sm">Audio</Link></li>
+                  <li><Link href="/watch" className="text-gray-400 hover:text-white transition-colors text-sm">Watch</Link></li>
+                  <li><Link href="/newsletters" className="text-gray-400 hover:text-white transition-colors text-sm">Newsletters</Link></li>
+                  <li><Link href="/transcripts" className="text-gray-400 hover:text-white transition-colors text-sm">Transcripts</Link></li>
+                </ul>
+              </div>
+
+              {/* Newsletter Signup */}
+              <div>
+                <h3 className="text-white font-bold text-lg mb-4">Newsletter</h3>
+                <p className="text-gray-400 text-sm mb-4">
+                  Get the latest news delivered to your inbox
+                </p>
+                <form onSubmit={handleNewsletterSubmit} className="space-y-3">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded text-white placeholder-gray-500 focus:outline-none focus:border-red-600 transition-colors"
+                    required
+                  />
+                  <button
+                    type="submit"
+                    className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded transition-colors"
+                  >
+                    Subscribe
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            {/* App Download Section */}
+            <div className="border-t border-gray-800 pt-8 mb-8">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div>
+                  <h3 className="text-white font-bold text-lg mb-2">Download the TG Calabria App</h3>
+                  <p className="text-gray-400 text-sm">Stay connected on the go</p>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <a 
+                    href="#" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center bg-black hover:bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 transition-colors"
+                  >
+                    <svg className="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                    </svg>
+                    <span className="text-white text-sm">App Store</span>
+                  </a>
+                  <a 
+                    href="#" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center bg-black hover:bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 transition-colors"
+                  >
+                    <svg className="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.61 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
+                    </svg>
+                    <span className="text-white text-sm">Google Play</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Legal Links */}
+            <div className="border-t border-gray-800 pt-8">
+              <nav className="footer__links">
+                <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-xs text-gray-400">
+                  <Link href="/terms" className="hover:text-white transition-colors">
+                    Terms of Use
+                  </Link>
+                  <span className="text-gray-600">|</span>
+                  <Link href="/privacy" className="hover:text-white transition-colors">
+                    Privacy Policy
+                  </Link>
+                  <span className="text-gray-600">|</span>
+                  <Link href="/cookies" className="hover:text-white transition-colors">
+                    Manage Cookies
+                  </Link>
+                  <span className="text-gray-600">|</span>
+                  <Link href="/advertise" className="hover:text-white transition-colors">
+                    Ad Choices
+                  </Link>
+                  <span className="text-gray-600">|</span>
+                  <Link href="/accessibility" className="hover:text-white transition-colors">
+                    Accessibility & CC
+                  </Link>
+                  <span className="text-gray-600">|</span>
+                  <Link href="/about" className="hover:text-white transition-colors">
+                    About
+                  </Link>
+                  <span className="text-gray-600">|</span>
+                  <Link href="/newsletters" className="hover:text-white transition-colors">
+                    Newsletters
+                  </Link>
+                  <span className="text-gray-600">|</span>
+                  <Link href="/transcripts" className="hover:text-white transition-colors">
+                    Transcripts
+                  </Link>
+                </div>
+              </nav>
+            </div>
+
+            {/* Copyright */}
+            <div className="text-center pt-8 border-t border-gray-800">
+              <p className="footer__copyright-text text-xs text-gray-500">
+                © 2026 TG Calabria. All Rights Reserved. <br />
+                TG Calabria Sans © 2026 TG Calabria.
               </p>
             </div>
-
-            {/* Quick Links */}
-            <div className="flex flex-col">
-              <h4 className="font-black mb-4 text-[#FFFFFF] text-sm uppercase tracking-wide">
-                Quick Links
-              </h4>
-              <ul className="space-y-2 text-xs">
-                <li><Link href="/" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">Home</Link></li>
-                <li><Link href="/weather" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">Weather</Link></li>
-                <li><Link href="/horoscope" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">Horoscope</Link></li>
-                <li><Link href="/category/sport" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">Sports</Link></li>
-                <li><Link href="/transport" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">Transport</Link></li>
-                <li><Link href="/tg-calabria" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">TG Calabria</Link></li>
-                <li><Link href="/search" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">Search</Link></li>
-                <li><Link href="/bookmarks" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">Bookmarks</Link></li>
-                <li><Link href="/report" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">Report</Link></li>
-              </ul>
-            </div>
-
-            {/* Categories */}
-            <div className="flex flex-col">
-              <h4 className="font-black mb-4 text-[#FFFFFF] text-sm uppercase tracking-wide">
-                Categories
-              </h4>
-              <ul className="space-y-2 text-xs">
-                <li><Link href="/category/italy" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">Italy | World</Link></li>
-                <li><Link href="/category/news" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">News</Link></li>
-                <li><Link href="/category/politics" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">Politics</Link></li>
-                <li><Link href="/category/sport" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">Sport</Link></li>
-                <li><Link href="/category/business" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">Business</Link></li>
-                <li><Link href="/category/entertainment" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">Entertainment</Link></li>
-                <li><Link href="/category/culture-lifestyle" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">Culture and Lifestyle</Link></li>
-                <li><Link href="/category/health-science" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">Health and Science</Link></li>
-                <li><Link href="/category/technology" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">Technology and Digital Media</Link></li>
-              </ul>
-            </div>
-
-            {/* Content */}
-            <div className="flex flex-col">
-              <h4 className="font-black mb-4 text-[#FFFFFF] text-sm uppercase tracking-wide">
-                Content
-              </h4>
-              <ul className="space-y-2 text-xs">
-                <li><Link href="/latest-news" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">Latest News</Link></li>
-                <li><Link href="/breaking-news" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">Breaking News</Link></li>
-                <li><Link href="/videos" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">Videos</Link></li>
-              </ul>
-            </div>
-
-            {/* Regional Services */}
-            <div className="flex flex-col">
-              <h4 className="font-black mb-4 text-[#FFFFFF] text-sm uppercase tracking-wide">
-                Regional Services
-              </h4>
-              <ul className="space-y-2 text-xs">
-                <li><Link href="/weather" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">Weather</Link></li>
-                <li><Link href="/horoscope" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">Horoscope</Link></li>
-                <li><Link href="/transport" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">Transport</Link></li>
-                <li><Link href="/tg-videos" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">TG Videos</Link></li>
-              </ul>
-            </div>
           </div>
-        </div>
-
-        {/* Social and App Download Section */}
-        <div className="footer__social-and-app px-4 py-8 border-t border-gray-800">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            {/* Social Links */}
-            <div>
-              <span className="social-links__copy block text-white font-bold mb-4 text-sm uppercase tracking-wide">
-                Calabria
-              </span>
-              <div className="social-links__items flex gap-4">
-                {socialLinks.facebook && (
-                  <SocialIcon name="facebook" href={socialLinks.facebook} />
-                )}
-                {socialLinks.twitter && (
-                  <SocialIcon name="twitter" href={socialLinks.twitter} />
-                )}
-                {socialLinks.instagram && (
-                  <SocialIcon name="instagram" href={socialLinks.instagram} />
-                )}
-                {socialLinks.youtube && (
-                  <SocialIcon name="youtube" href={socialLinks.youtube} />
-                )}
-              </div>
-            </div>
-
-            {/* App Download */}
-            <div className="footer__app-download text-center md:text-right">
-              <span className="footer__app-download-copy block text-white font-bold mb-4 text-sm uppercase tracking-wide">
-                Download the calabria app
-              </span>
-              <div className="footer__app-download-buttons flex flex-col sm:flex-row gap-4 justify-center md:justify-end">
-                <a 
-                  href="https://cnn.onelink.me/PVpf/q9j1odhf" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="footer__app-download-link inline-block"
-                >
-                  <svg width="120" height="40" viewBox="0 0 120 40" fill="none">
-                    <rect width="120" height="40" rx="8" fill="black"/>
-                    <text x="10" y="25" fill="white" fontSize="12" fontWeight="bold">Download on</text>
-                    <text x="10" y="35" fill="white" fontSize="16" fontWeight="bold">App Store</text>
-                  </svg>
-                </a>
-                <a 
-                  href="https://cnn.onelink.me/PVpf/43qg6lsp" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="footer__app-download-link inline-block"
-                >
-                  <svg width="120" height="40" viewBox="0 0 120 40" fill="none">
-                    <rect width="120" height="40" rx="8" fill="black"/>
-                    <text x="10" y="25" fill="white" fontSize="12" fontWeight="bold">Get it on</text>
-                    <text x="10" y="35" fill="white" fontSize="16" fontWeight="bold">Google Play</text>
-                  </svg>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile App Download Section */}
-        <div className="footer__app-download-section footer__app-download-section--mobile px-4 py-6 border-t border-gray-800 md:hidden">
-          <div className="footer__app-download text-center">
-            <span className="footer__app-download-copy block text-white font-bold mb-4 text-sm uppercase tracking-wide">
-              Download calabria app
-            </span>
-            <div className="footer__app-download-buttons flex flex-col gap-4">
-              <a 
-                href="https://cnn.onelink.me/PVpf/q9j1odhf" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="footer__app-download-link inline-block"
-              >
-                <svg width="120" height="40" viewBox="0 0 120 40" fill="none">
-                  <rect width="120" height="40" rx="8" fill="black"/>
-                  <text x="10" y="25" fill="white" fontSize="12" fontWeight="bold">Download on</text>
-                  <text x="10" y="35" fill="white" fontSize="16" fontWeight="bold">App Store</text>
-                </svg>
-              </a>
-              <a 
-                href="https://cnn.onelink.me/PVpf/43qg6lsp" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="footer__app-download-link inline-block"
-              >
-                <svg width="120" height="40" viewBox="0 0 120 40" fill="none">
-                  <rect width="120" height="40" rx="8" fill="black"/>
-                  <text x="10" y="25" fill="white" fontSize="12" fontWeight="bold">Get it on</text>
-                  <text x="10" y="35" fill="white" fontSize="16" fontWeight="bold">Google Play</text>
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <hr className="border-gray-700 my-0" />
-
-        {/* Legal Links */}
-        <nav className="footer__links px-4 py-6">
-          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-xs">
-            <Link href="/terms" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">
-              Terms of Use
-            </Link>
-            <span className="text-gray-600">|</span>
-            <Link href="/privacy" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">
-              Privacy Policy
-            </Link>
-            <span className="text-gray-600">|</span>
-            <Link href="/data-deletion" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">
-              Data Deletion
-            </Link>
-            <span className="text-gray-600">|</span>
-            <Link href="/cookies" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">
-              Manage Cookies
-            </Link>
-            <span className="text-gray-600">|</span>
-            <Link href="/advertise" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">
-              Ad Choices
-            </Link>
-            <span className="text-gray-600">|</span>
-            <Link href="/accessibility" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">
-              Accessibility & CC
-            </Link>
-            <span className="text-gray-600">|</span>
-            <Link href="/about" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">
-              About
-            </Link>
-            <span className="text-gray-600">|</span>
-            <Link href="/newsletters" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">
-              Newsletters
-            </Link>
-            <span className="text-gray-600">|</span>
-            <Link href="/transcripts" className="text-[#999999] hover:text-[#FFFFFF] transition-colors">
-              Transcripts
-            </Link>
-          </div>
-        </nav>
-
-        {/* Copyright */}
-        <div className="px-4 py-6 text-center">
-          <p className="footer__copyright-text text-xs text-[#999999] mb-2">
-            © 2026 Cable News Network. A Warner Bros. Discovery Company. All Rights Reserved.
-          </p>
-          <p className="text-xs text-[#666666]">
-            CNN Sans ™ & © 2016 Cable News Network.
-          </p>
-        </div>
+        </footer>
       </div>
-    </footer>
+    </div>
   );
 }

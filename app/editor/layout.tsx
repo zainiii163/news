@@ -58,7 +58,7 @@ export default function EditorLayout({ children }: { children: React.ReactNode }
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div data-app-chrome-shell className="flex min-h-screen w-full min-w-0 bg-gray-100">
       {/* Desktop Sidebar */}
       <div className="hidden lg:block">
         <EditorSidebar isCollapsed={isCollapsed} onToggleCollapse={handleToggleCollapse} />

@@ -5,6 +5,7 @@ import { News } from "@/types/news.types";
 import { NewsCard } from "@/components/ui/news-card";
 import { Category } from "@/types/category.types";
 import { useLanguage } from "@/providers/LanguageProvider";
+import { categorySectionHref } from "@/lib/helpers/category-routes";
 
 interface CategoryBlocksProps {
   categoryStories: Record<string, { category: Category; news: News[] }>;
@@ -26,7 +27,7 @@ export function CategoryBlocks({
         <div key={category.id} className="">
           {/* Section Header */}
           <div className="mb-6">
-            <Link href={`/category/${category.slug}`} className="group">
+            <Link href={categorySectionHref(category.slug)} className="group">
               <h2 className="text-lg font-extrabold uppercase tracking-wide text-gray-900 border-b-2 border-red-600 pb-1 inline-block group-hover:text-red-600 transition">
                 {language === "it" ? category.nameIt : category.nameEn}
               </h2>
@@ -44,7 +45,7 @@ export function CategoryBlocks({
           {news.length > maxPerCategory && (
             <div className="mt-4">
               <Link
-                href={`/category/${category.slug}`}
+                href={categorySectionHref(category.slug)}
                 className="text-sm text-red-600 hover:text-red-700 font-extrabold uppercase tracking-wide transition"
               >
                 {language === "it" ? "ALTRO DA" : "MORE FROM"} {language === "it" ? category.nameIt : category.nameEn} →

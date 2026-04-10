@@ -13,6 +13,8 @@ import {
 } from "@/lib/hooks/useNews";
 import { useCategories } from "@/lib/hooks/useCategories";
 import { CategoryResponse } from "@/types/category.types";
+import { ApiResponse } from "@/types/api.types";
+import { categoriesFromApiResponse } from "@/lib/helpers/category-helpers";
 import { Loading } from "@/components/ui/loading";
 import { ErrorMessage } from "@/components/ui/error-message";
 import { NewsFormModal } from "@/components/admin/news-form-modal";
@@ -101,7 +103,13 @@ function EditorNewsPageContent() {
 
   // Fetch all categories but filter to show only allowed ones
   const { data: categoriesData } = useCategories(true);
-  const categoriesList = (categoriesData as CategoryResponse | undefined)?.data || [];
+  const categoriesList = useMemo(
+    () =>
+      categoriesFromApiResponse(
+        categoriesData as ApiResponse<CategoryResponse> | undefined
+      ),
+    [categoriesData]
+  );
   const allowedCategories =
     categoriesList.filter((cat) =>
       allowedCategoryIds.includes(cat.id)

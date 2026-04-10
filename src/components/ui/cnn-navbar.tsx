@@ -1,26 +1,13 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useLanguage } from "@/providers/LanguageProvider";
 import { usePathname } from "next/navigation";
+import { useNavCategoryLinks } from "@/lib/hooks/useNavCategoryLinks";
 
-// CNN-style font family
-const CNN_FONT = '"CNN", "Helvetica Neue", Helvetica, Arial, sans-serif';
-
-// CNN Navigation Menu Items - Exact match to CNN
-const CNN_MENU_ITEMS = [
-  { nameEn: "US", nameIt: "USA", href: "/us" },
-  { nameEn: "World", nameIt: "Mondo", href: "/world" },
-  { nameEn: "Politics", nameIt: "Politica", href: "/politics" },
-  { nameEn: "Business", nameIt: "Economia", href: "/business" },
-  { nameEn: "Health", nameIt: "Salute", href: "/health" },
-  { nameEn: "Entertainment", nameIt: "Intrattenimento", href: "/entertainment" },
-  { nameEn: "Style", nameIt: "Stile", href: "/style" },
-  { nameEn: "Travel", nameIt: "Viaggi", href: "/travel" },
-  { nameEn: "Sports", nameIt: "Sport", href: "/sports" },
-  { nameEn: "Science", nameIt: "Scienza", href: "/science" },
-];
+/** Max primary links in the rail; remainder under “More” (CNN-style). Long CMS names need fewer primaries. */
+const MAX_PRIMARY_NAV_LINKS = 6;
 
 interface CNNNavbarProps {
   isMobileMenuOpen?: boolean;
@@ -28,227 +15,123 @@ interface CNNNavbarProps {
   onCloseMobileMenu?: () => void;
 }
 
-export function CNNNavbar({ isMobileMenuOpen, onMobileMenuToggle, onCloseMobileMenu }: CNNNavbarProps) {
+export function CNNNavbar({
+  isMobileMenuOpen: _isMobileMenuOpen,
+  onMobileMenuToggle: _onMobileMenuToggle,
+  onCloseMobileMenu: _onCloseMobileMenu,
+}: CNNNavbarProps) {
   const { language } = useLanguage();
   const pathname = usePathname();
-  const [isMoreOpen, setIsMoreOpen] = useState(false);
+  const { items: navItems, subcategoryLinks, pageLinks } = useNavCategoryLinks();
+  const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
   const moreMenuRef = useRef<HTMLDivElement>(null);
-  const menuButtonRef = useRef<HTMLButtonElement>(null);
-  const lastToggleTimeRef = useRef<number>(0);
-  const touchHandledRef = useRef<boolean>(false);
 
-  // Max items visible in main nav (CNN shows 8-9 items, rest in "More")
-  const MAX_VISIBLE = 8;
-  const visibleItems = CNN_MENU_ITEMS.slice(0, MAX_VISIBLE);
-  const moreItems = CNN_MENU_ITEMS.slice(MAX_VISIBLE);
-
-  // Close "More" dropdown when clicking outside
-  const handleOutside = useCallback((e: MouseEvent) => {
-    if (moreMenuRef.current && !moreMenuRef.current.contains(e.target as Node)) {
-      setIsMoreOpen(false);
+  const { visibleItems, moreItems } = useMemo(() => {
+    const tail = [...subcategoryLinks, ...pageLinks];
+    const n = navItems.length;
+    if (n <= 1) {
+      return { visibleItems: navItems, moreItems: tail };
     }
-  }, []);
+    const primary = Math.min(MAX_PRIMARY_NAV_LINKS, n);
+    return {
+      visibleItems: navItems.slice(0, primary),
+      moreItems: [...navItems.slice(primary), ...tail],
+    };
+  }, [navItems, subcategoryLinks, pageLinks]);
 
-  // Setup outside click listener - move to useEffect
+  const moreLabel = language === "it" ? "Altro" : "More";
+
+  const hasMoreMenu = moreItems.length > 0;
+  const isMoreOpen = hasMoreMenu && moreDropdownOpen;
+
   useEffect(() => {
+    function handleOutside(e: MouseEvent) {
+      if (moreMenuRef.current && !moreMenuRef.current.contains(e.target as Node)) {
+        setMoreDropdownOpen(false);
+      }
+    }
     if (isMoreOpen) {
       document.addEventListener("mousedown", handleOutside);
       return () => document.removeEventListener("mousedown", handleOutside);
     }
-  }, [isMoreOpen, handleOutside]);
-
-  const closeMobileMenu = useCallback(() => {
-    if (onCloseMobileMenu) {
-      onCloseMobileMenu();
-    }
-  }, [onCloseMobileMenu]);
-
-  const handleToggle = useCallback(() => {
-    const now = Date.now();
-    if (now - lastToggleTimeRef.current < 100) return;
-    lastToggleTimeRef.current = now;
-    if (onMobileMenuToggle) {
-      onMobileMenuToggle();
-    }
-  }, [onMobileMenuToggle]);
-
-  const handleTouchEnd = useCallback((e: React.TouchEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    if (e.cancelable) e.preventDefault();
-    touchHandledRef.current = true;
-    handleToggle();
-    setTimeout(() => { touchHandledRef.current = false; }, 300);
-  }, [handleToggle]);
-
-  const handlePointerDown = useCallback((e: React.PointerEvent<HTMLButtonElement>) => {
-    if (e.pointerType === 'touch' || e.pointerType === 'pen') {
-      e.stopPropagation();
-      if (e.cancelable) e.preventDefault();
-      touchHandledRef.current = true;
-      handleToggle();
-      setTimeout(() => { touchHandledRef.current = false; }, 300);
-    }
-  }, [handleToggle]);
-
-  const handleClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    if (touchHandledRef.current) {
-      e.preventDefault();
-      e.stopPropagation();
-      return;
-    }
-    e.stopPropagation();
-    e.preventDefault();
-    handleToggle();
-  }, [handleToggle]);
+  }, [isMoreOpen]);
 
   return (
-    <>
-      {/* Desktop Navigation */}
-      <nav className="cnn-nav-container hidden md:flex">
-        {visibleItems.map((item, index) => {
-          const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
-          const displayName = language === "it" ? item.nameIt : item.nameEn;
-          return (
-            <div 
-              key={item.href} 
-              className="cnn-nav-item"
-            >
-              <Link
-                href={item.href}
-                prefetch={true}
-                className={`cnn-nav-link ${isActive ? 'active' : ''}`}
-                data-zjs="click"
-                data-zjs-component_id={item.href}
-                data-zjs-component_text={displayName}
-                data-zjs-component_type="link"
-                data-zjs-container_id="cms.cnn.com/_components/header/instances/cnn-v2@published"
-                data-zjs-container_type="navigation"
-                data-zjs-destination_url={item.href}
-                data-zjs-page_type="section"
-                data-zjs-page_variant="landing_homepage"
-                data-zjs-navigation-type="main"
-                data-zjs-navigation_location="header"
-              >
-                {displayName}
-              </Link>
-            </div>
-          );
-        })}
+    <nav
+      className="header__nav hidden lg:flex"
+      style={{
+        backgroundColor: "#ffffff",
+        overflow: "visible",
+      }}
+    >
+      <div
+        className="header__nav-container"
+        style={{
+          flex: "1 1 auto",
+          width: "100%",
+          maxWidth: "100%",
+          overflow: "visible",
+        }}
+      >
+        {/* Scroll only the primary links; “More” + dropdown stay outside so overflow-y:hidden does not clip the panel */}
+        <div className="header__nav-links-scroll">
+          {visibleItems.map((item) => {
+            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+            const displayName = language === "it" ? item.nameIt : item.nameEn;
+            return (
+              <div key={item.id} className="header__nav-item" style={{ display: "block" }}>
+                <Link
+                  href={item.href}
+                  prefetch={true}
+                  title={displayName}
+                  className={`header__nav-item-link ${isActive ? "header__nav-item-link--active" : ""}`}
+                >
+                  {displayName}
+                </Link>
+              </div>
+            );
+          })}
+        </div>
 
-        {/* More Dropdown */}
-        {moreItems.length > 0 && (
-          <div className="cnn-more-dropdown">
+        {hasMoreMenu && (
+          <div ref={moreMenuRef} className="header__nav-more" style={{ display: "block" }}>
             <button
-              className="cnn-more-button"
+              id="moreDropdown"
+              type="button"
+              className="header__nav-item-link header__nav-more-link header__nav-button"
               aria-expanded={isMoreOpen}
               aria-haspopup="true"
+              onClick={() => setMoreDropdownOpen((prev) => !prev)}
             >
-              <span>More</span>
-              <svg className="cnn-more-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
+              <span
+                className={`header__nav-more--toggle-caret ${isMoreOpen ? "header__nav-more--toggle-caret-up" : "header__nav-more--toggle-caret-down"}`}
+              >
+                {moreLabel}
+              </span>
             </button>
-            
-            <div className="cnn-dropdown-menu">
-              {moreItems.map((item) => {
-                const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
-                const displayName = language === "it" ? item.nameIt : item.nameEn;
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    prefetch={true}
-                    className={`cnn-dropdown-item ${isActive ? 'active' : ''}`}
-                    onClick={() => setIsMoreOpen(false)}
-                  >
-                    {displayName}
-                  </Link>
-                );
-              })}
+
+            <div className={`header__nav-item-dropdown ${isMoreOpen ? "show" : ""}`}>
+              <div className="header__nav-item-dropdown-inner">
+                {moreItems.map((item) => {
+                  const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+                  const displayName = language === "it" ? item.nameIt : item.nameEn;
+                  return (
+                    <Link
+                      key={item.id}
+                      href={item.href}
+                      prefetch={true}
+                      onClick={() => setMoreDropdownOpen(false)}
+                      className={`header__nav-item-dropdown-item ${isActive ? "header__nav-item-dropdown-item--active" : ""}`}
+                    >
+                      {displayName}
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
           </div>
         )}
-      </nav>
-
-      {/* Mobile Menu Icons - Only show on mobile */}
-      <button 
-        id="headerMenuIcon"
-        className="cnn-mobile-menu-button md:hidden" 
-        aria-label="Open Menu Icon"
-        onClick={handleClick}
-        onTouchEnd={handleTouchEnd}
-        onPointerDown={handlePointerDown}
-        type="button"
-        data-testid="mobile-menu-button"
-      >
-        <svg 
-          className="w-5 h-5" 
-          width="20" 
-          height="20" 
-          viewBox="0 0 28 28" 
-          fill="none" 
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path 
-            fillRule="evenodd" 
-            clipRule="evenodd" 
-            d="M4.473 8.15263H23.5266C24.0643 8.15263 24.5 7.6777 24.5 7.09194C24.5 6.50618 24.0643 6.03174 23.5266 6.03174H4.473C3.93531 6.03174 3.5 6.50618 3.5 7.09194C3.5 7.6777 3.93531 8.15263 4.473 8.15263ZM19.0765 12.9327H4.25706C3.83886 12.9327 3.50028 13.4076 3.50028 13.9934C3.50028 14.5791 3.83886 15.0536 4.25706 15.0536H19.0765C19.4947 15.0536 19.8336 14.5791 19.8336 13.9934C19.8336 13.4076 19.4947 12.9327 19.0765 12.9327ZM4.47328 19.8337H23.5268C24.0645 19.8337 24.5003 20.3086 24.5003 20.8944C24.5003 21.4802 24.0645 21.9546 23.5268 21.9546H4.47328C3.9356 21.9546 3.50028 21.4802 3.50028 20.8944C3.50028 20.3086 3.9356 19.8337 4.47328 19.8337Z"
-            fill="currentColor"
-          />
-        </svg>
-      </button>
-
-      {/* Close Menu Icon */}
-      <button 
-        id="headerCloseIcon"
-        className={`cnn-mobile-menu-button md:hidden ${isMobileMenuOpen ? 'flex' : 'hidden'}`} 
-        aria-label="Close Menu Icon"
-        onClick={handleClick}
-        onTouchEnd={handleTouchEnd}
-        onPointerDown={handlePointerDown}
-        type="button"
-      >
-        <svg 
-          className="w-8 h-8" 
-          role="img" 
-          width="32" 
-          height="32" 
-          viewBox="0 0 32 32" 
-          xmlns="http://www.w3.org/2000/svg" 
-          aria-labelledby="closeIconTitle" 
-          aria-haspopup="true" 
-          aria-expanded="false"
-        >
-          <title id="closeIconTitle">Close icon</title>
-          <path 
-            d="M29.1,32L10.6,50.6c-0.8,0.8-0.8,2.1,0,2.9c0.8,0.8,2.1,0.8,2.9,0L32,34.9l18.5,18.5c0.8,0.8,2.1,0.8,2.9,0c0.8-0.8,0.8-2.1,0-2.9s-2.1-0.8-2.9,0L32,29.1l18.5-18.5c0.8-0.8,0.8-2.1,0-2.9s-2.1-0.8-2.9,0L32,29.1Z"
-            fill="currentColor"
-          />
-        </svg>
-      </button>
-
-      {/* Mobile Menu */}
-      <div
-        id="mobile-menu"
-        className={`cnn-mobile-menu ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}
-        data-open={isMobileMenuOpen ? "true" : "false"}
-      >
-        {CNN_MENU_ITEMS.map((item) => {
-          const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
-          const displayName = language === "it" ? item.nameIt : item.nameEn;
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              prefetch={true}
-              onClick={closeMobileMenu}
-              className={`cnn-mobile-menu-item ${isActive ? 'active' : ''}`}
-            >
-              {displayName}
-            </Link>
-          );
-        })}
       </div>
-    </>
+    </nav>
   );
 }

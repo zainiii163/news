@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useAuth } from "@/providers/AuthProvider";
 import { useGetMe } from "@/lib/hooks/useAuth";
 import { AuthResponse } from "@/types/user.types";
@@ -9,6 +9,8 @@ import { useNews } from "@/lib/hooks/useNews";
 import { NewsResponse } from "@/types/news.types";
 import { useCategories } from "@/lib/hooks/useCategories";
 import { CategoryResponse } from "@/types/category.types";
+import { ApiResponse } from "@/types/api.types";
+import { categoriesFromApiResponse } from "@/lib/helpers/category-helpers";
 import { StatsCard } from "@/components/admin/stats-card";
 import { Loading } from "@/components/ui/loading";
 import { ErrorMessage } from "@/components/ui/error-message";
@@ -36,7 +38,13 @@ export default function EditorDashboard() {
 
   // Fetch all categories but filter to show only allowed ones
   const { data: categoriesData } = useCategories(true);
-  const categoriesList = (categoriesData as CategoryResponse | undefined)?.data || [];
+  const categoriesList = useMemo(
+    () =>
+      categoriesFromApiResponse(
+        categoriesData as ApiResponse<CategoryResponse> | undefined
+      ),
+    [categoriesData]
+  );
   const allowedCategories =
     categoriesList.filter((cat) =>
       allowedCategoryIds.includes(cat.id)

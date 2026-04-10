@@ -21,7 +21,7 @@ export function CNNAdvertisementSection() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsAdLoaded(true);
-    }, 1500); // Simulate ad load time
+    }, 100); // Much faster load time
     
     return () => clearTimeout(timer);
   }, []);
@@ -96,10 +96,30 @@ export function CNNAdvertisementSection() {
                   color: '#ffffff',
                   fontSize: '14px',
                   fontWeight: '500',
-                  fontFamily: 'CNN, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                 }}
               >
                 Advertisement {currentAdSize.width}x{currentAdSize.height}
+              </div>
+              
+              {/* ADVERTISEMENT Text - CNN Style */}
+              <div 
+                className="cnn-ad-label"
+                style={{
+                  position: 'absolute',
+                  bottom: '0',
+                  left: '0',
+                  backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                  color: '#ffffff',
+                  fontSize: '10px',
+                  padding: '2px 6px',
+                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontWeight: '500',
+                  letterSpacing: '0.5px',
+                  textTransform: 'uppercase',
+                }}
+              >
+                Advertisement
               </div>
               
               {/* Ad Feedback Link */}
@@ -114,7 +134,7 @@ export function CNNAdvertisementSection() {
                   fontSize: '10px',
                   padding: '2px 6px',
                   cursor: 'pointer',
-                  fontFamily: 'CNN, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                   transition: 'background-color 0.15s ease',
                 }}
                 onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.9)')}

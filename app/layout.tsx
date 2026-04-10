@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import "../src/styles/cnn-header-prototype.css";
-import "../src/styles/cnn-navbar-exact.css";
-import "../src/styles/cnn-layout.css";
+import "../src/styles/cnn-header-complete.css";
+import "../src/styles/cnn-homepage.css";
 import { QueryProvider } from "@/providers/QueryProvider";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { LanguageProvider } from "@/providers/LanguageProvider";
+import { ArticleChromeProvider } from "@/providers/ArticleChromeProvider";
 import { ToastProvider } from "@/components/ui/toast";
 import { BreakingNewsManager } from "@/components/notifications/breaking-news-manager";
 import { BehaviorTracker } from "@/components/analytics/behavior-tracker";
@@ -14,7 +14,6 @@ import { AdsWrapper } from "@/components/ads/ads-wrapper";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { CNNHeaderExact } from "@/components/ui/cnn-header-exact";
 import { MainContent } from "@/components/ui/main-content";
-import { Footer } from "@/components/ui/footer";
 import { MegaFooter } from "@/components/ui/mega-footer";
 
 const geistSans = Geist({
@@ -46,7 +45,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="light" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#FFFFFF] text-[#0A0A0A] overflow-x-hidden max-w-full`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#FFFFFF] text-[#0A0A0A] overflow-x-clip max-w-full`}
         suppressHydrationWarning
       >
         <ErrorBoundary>
@@ -54,17 +53,19 @@ export default function RootLayout({
             <LanguageProvider>
               <AuthProvider>
                 <ToastProvider>
-                  <BehaviorTracker>
-                    <AdsWrapper />
-                    <BreakingNewsManager />
-                    <div className="min-h-screen bg-[#FFFFFF]">
-                      <CNNHeaderExact />
-                      <MainContent>
-                        {children}
-                      </MainContent>
-                      <MegaFooter />
-                    </div>
-                  </BehaviorTracker>
+                  <ArticleChromeProvider>
+                    <BehaviorTracker>
+                      <AdsWrapper />
+                      <BreakingNewsManager />
+                      <div className="min-h-screen bg-[#FFFFFF]">
+                        <CNNHeaderExact />
+                        <MainContent>
+                          {children}
+                        </MainContent>
+                        <MegaFooter />
+                      </div>
+                    </BehaviorTracker>
+                  </ArticleChromeProvider>
                 </ToastProvider>
               </AuthProvider>
             </LanguageProvider>

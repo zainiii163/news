@@ -7,43 +7,60 @@ import { useLanguage } from "@/providers/LanguageProvider";
 import { Loading } from "@/components/ui/loading";
 import { Category } from "@/types/category.types";
 import { getRootCategories } from "@/lib/helpers/category-helpers";
+import { categorySectionBaseFromPathname } from "@/lib/helpers/category-routes";
 
 interface RelatedCategoriesProps {
   currentCategoryId: string;
   currentCategoryParentId?: string | null;
   className?: string;
+  /** Match homepage CNN rail: no left border box, section heading with red rule */
+  variant?: "default" | "cnnRail";
 }
 
 export function RelatedCategories({
   currentCategoryId,
   currentCategoryParentId,
   className = "",
+  variant = "default",
 }: RelatedCategoriesProps) {
   const { language } = useLanguage();
   const pathname = usePathname();
   const { data: categoriesData, isLoading } = useCategories(true);
 
+  const boxStyle =
+    variant === "cnnRail"
+      ? ({
+          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+          backgroundColor: "#ffffff",
+        } as const)
+      : ({
+          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+          borderLeft: "1px solid #e6e6e6",
+          paddingLeft: "16px",
+          backgroundColor: "#ffffff",
+        } as const);
+
   if (isLoading) {
     return (
-      <div 
-        className={className}
-        style={{ 
-          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-          borderLeft: '1px solid #e6e6e6',
-          paddingLeft: '16px',
-          backgroundColor: '#ffffff',
-        }}
-      >
-        <h3 
-          className="mb-4 pb-3"
-          style={{
-            borderBottom: '1px solid #e6e6e6',
-            fontSize: '13px',
-            fontWeight: 700,
-            letterSpacing: '0.5px',
-            textTransform: 'uppercase',
-            color: '#0A0A0A',
-          }}
+      <div className={className} style={boxStyle}>
+        <h3
+          className={
+            variant === "cnnRail"
+              ? "cnn-hp-section-heading border-l-4 border-[#cc0000] pl-3 mb-3"
+              : "mb-4 pb-3"
+          }
+          style={
+            variant === "cnnRail"
+              ? undefined
+              : {
+                  borderBottom: "1px solid #e6e6e6",
+                  fontSize: "13px",
+                  fontWeight: 700,
+                  letterSpacing: "0.5px",
+                  textTransform: "uppercase",
+                  color: "#0A0A0A",
+                }
+          }
         >
           {language === "it" ? "Categorie" : "Categories"}
         </h3>
@@ -117,32 +134,34 @@ export function RelatedCategories({
           color: #CC0000 !important;
         }
       `}} />
-      <div 
-        className={className}
-        style={{ 
-          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-          borderLeft: '1px solid #e6e6e6',
-          paddingLeft: '16px',
-          backgroundColor: '#ffffff',
-        }}
-      >
-        <h3 
-          className="mb-4 pb-3"
-          style={{
-            borderBottom: '1px solid #e6e6e6',
-            fontSize: '13px',
-            fontWeight: 700,
-            letterSpacing: '0.5px',
-            textTransform: 'uppercase',
-            color: '#0A0A0A',
-          }}
+      <div className={className} style={boxStyle}>
+        <h3
+          className={
+            variant === "cnnRail"
+              ? "cnn-hp-section-heading border-l-4 border-[#cc0000] pl-3 mb-3"
+              : "mb-4 pb-3"
+          }
+          style={
+            variant === "cnnRail"
+              ? undefined
+              : {
+                  borderBottom: "1px solid #e6e6e6",
+                  fontSize: "13px",
+                  fontWeight: 700,
+                  letterSpacing: "0.5px",
+                  textTransform: "uppercase",
+                  color: "#0A0A0A",
+                }
+          }
         >
           {language === "it" ? "Categorie" : "Categories"}
         </h3>
       <ul className="cnn-sidebar-container" style={{ margin: 0, padding: 0, listStyle: 'none' }}>
         {displayCategories.map((category, index) => {
-          const categoryPath = `/category/${category.slug}`;
-          const isActive = pathname === categoryPath || pathname.startsWith(categoryPath + '/');
+          const base = categorySectionBaseFromPathname(pathname);
+          const categoryPath = `${base}/${category.slug}`;
+          const slugFromPath = pathname?.match(/^\/(?:category|categories)\/([^/]+)/)?.[1];
+          const isActive = slugFromPath === category.slug;
           const categoryName = language === "it" ? category.nameIt : category.nameEn;
           
           return (

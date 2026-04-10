@@ -94,30 +94,21 @@ const nextConfig: NextConfig = {
           ],
         },
         {
-          // CSS files - must come before general static path
+          // CSS chunks — cache only; do not set Content-Type (avoids nosniff issues on 404/plain responses)
           source: "/_next/static/:path*\\.css",
           headers: [
             {
               key: "Cache-Control",
               value: "public, max-age=31536000, immutable",
             },
-            {
-              key: "Content-Type",
-              value: "text/css; charset=utf-8",
-            },
           ],
         },
         {
-          // JavaScript files - must come before general static path
           source: "/_next/static/:path*\\.js",
           headers: [
             {
               key: "Cache-Control",
               value: "public, max-age=31536000, immutable",
-            },
-            {
-              key: "Content-Type",
-              value: "application/javascript; charset=utf-8",
             },
           ],
         },
@@ -172,7 +163,7 @@ const nextConfig: NextConfig = {
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     // Supported quality values (must include all qualities used in Image components)
-    qualities: [75, 85, 90],
+    qualities: [60, 75, 80, 85, 90],
     // Minimum quality for optimized images
     minimumCacheTTL: isDev ? 60 : 3600, // Shorter cache in dev, longer in production
     // Add timeout for external images

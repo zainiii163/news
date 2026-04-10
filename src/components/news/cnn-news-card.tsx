@@ -8,6 +8,7 @@ import { HeroArticleImage, NewsCardImage, CompactCardImage, HorizontalCardImage 
 import { formatDate, formatRelativeTime } from "@/lib/helpers/formatDate";
 import { cn } from "@/lib/helpers/cn";
 import { getImageUrl } from "@/lib/helpers/imageUrl";
+import { categorySectionHref } from "@/lib/helpers/category-routes";
 
 // Helper function to check if breaking news is still fresh (within 1 hour)
 function isBreakingNewsFresh(createdAt: string | Date): boolean {
@@ -30,7 +31,7 @@ export const HeroCard = memo(function HeroCard({ news, className }: BaseCardProp
     e.preventDefault();
     e.stopPropagation();
     if (news.category) {
-      router.push(`/category/${news.category.slug}`);
+      router.push(categorySectionHref(news.category.slug));
     }
   };
 

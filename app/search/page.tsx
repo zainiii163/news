@@ -16,6 +16,7 @@ import {
   useBehaviorTracking,
   trackSearch,
 } from "@/lib/hooks/useBehaviorTracking";
+import { categorySectionHref } from "@/lib/helpers/category-routes";
 
 function SearchPageContent() {
   const router = useRouter();
@@ -192,7 +193,7 @@ function SearchPageContent() {
                       {results.categories.map((category) => (
                         <Link
                           key={category.id}
-                          href={`/category/${category.slug}`}
+                          href={categorySectionHref(category.slug)}
                           className="block p-4 bg-white border border-gray-200 rounded-lg hover:border-red-600 hover:shadow-md transition"
                         >
                           <h3 className="font-semibold text-gray-900 mb-1">

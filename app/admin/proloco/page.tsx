@@ -9,6 +9,8 @@ import { Loading } from "@/components/ui/loading";
 import { ErrorMessage } from "@/components/ui/error-message";
 import { useCategories } from "@/lib/hooks/useCategories";
 import { CategoryResponse } from "@/types/category.types";
+import { ApiResponse } from "@/types/api.types";
+import { categoriesFromApiResponse } from "@/lib/helpers/category-helpers";
 import { formatDate } from "@/lib/helpers/formatDate";
 
 interface ProlocoUser {
@@ -49,7 +51,9 @@ export default function ProlocoManagement() {
   const [actionLoading, setActionLoading] = useState(false);
 
   const { data: categoriesData } = useCategories(true);
-  const categoriesList = (categoriesData as CategoryResponse | undefined)?.data || [];
+  const categoriesList = categoriesFromApiResponse(
+    categoriesData as ApiResponse<CategoryResponse> | undefined
+  );
 
   useEffect(() => {
     if (!isAuthenticated || (user && user.role !== "ADMIN" && user.role !== "SUPER_ADMIN")) {

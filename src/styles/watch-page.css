@@ -1,0 +1,275 @@
+/* TG Calabria — Watch hub (CNN-style video section) */
+
+.watch-page {
+  font-family: "CNN", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.watch-masthead {
+  background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+}
+
+.watch-kicker {
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #c70000;
+}
+
+.watch-title {
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.15;
+  color: #0a0a0a;
+  letter-spacing: -0.02em;
+}
+
+.watch-subtitle {
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  color: #4a4a4a;
+  max-width: 42rem;
+}
+
+/* Cinematic empty hero */
+.watch-hero-placeholder {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  max-height: min(52vh, 520px);
+  border-radius: 4px;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    #1a1a1a 0%,
+    #2d1810 45%,
+    #4a1518 70%,
+    #1a1a1a 100%
+  );
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+.watch-hero-placeholder::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 40%,
+    rgba(199, 0, 0, 0.15) 0%,
+    transparent 65%
+  );
+  pointer-events: none;
+}
+
+.watch-hero-placeholder__inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  text-align: center;
+  z-index: 1;
+}
+
+.watch-hero-placeholder__play {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  backdrop-filter: blur(6px);
+}
+
+.watch-hero-placeholder__label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.watch-hero-placeholder__hint {
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.65);
+  max-width: 22rem;
+  line-height: 1.45;
+}
+
+/* Featured video stage (with real embed) */
+.watch-hero-stage {
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+/* Section heading — matches homepage zone style */
+.watch-section-title {
+  font-size: 1.375rem;
+  font-weight: 800;
+  color: #0a0a0a;
+  border-left: 4px solid #c70000;
+  padding-left: 0.75rem;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.02em;
+}
+
+/* Video cards */
+.watch-card {
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.watch-card:hover {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+  border-color: #d0d0d0;
+  transform: translateY(-2px);
+}
+
+.watch-thumb {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: #1a1a1a;
+  overflow: hidden;
+}
+
+.watch-thumb__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.watch-card:hover .watch-thumb__overlay {
+  opacity: 1;
+}
+
+.watch-play-circle {
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 50%;
+  background: rgba(199, 0, 0, 0.95);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.watch-badge {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0.5rem;
+  z-index: 2;
+  font-size: 0.625rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.25rem 0.5rem;
+  background: rgba(0, 0, 0, 0.78);
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Empty spotlight tiles */
+.watch-spotlight-tile {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px dashed #cfcfcf;
+  background: linear-gradient(180deg, #f5f5f5 0%, #ebebeb 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.watch-spotlight-tile:hover {
+  border-color: #c70000;
+  background: linear-gradient(180deg, #fafafa 0%, #f0f0f0 100%);
+}
+
+.watch-spotlight-tile__icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: #c70000;
+  opacity: 0.85;
+}
+
+.watch-spotlight-tile__title {
+  font-size: 0.9375rem;
+  font-weight: 800;
+  color: #333;
+  text-align: center;
+}
+
+.watch-spotlight-tile__meta {
+  font-size: 0.75rem;
+  color: #737373;
+  text-align: center;
+}
+
+/* CTA buttons */
+.watch-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.35rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #fff;
+  background: #c70000;
+  border-radius: 4px;
+  transition: background 0.15s ease;
+}
+
+.watch-btn-primary:hover {
+  background: #a80000;
+}
+
+.watch-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.35rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  background: #fff;
+  border: 1px solid #d4d4d4;
+  border-radius: 4px;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.watch-btn-secondary:hover {
+  border-color: #c70000;
+  background: #fff5f5;
+}

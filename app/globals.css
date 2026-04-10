@@ -13,7 +13,8 @@
 
 html {
   color-scheme: light;
-  overflow-x: hidden;
+  /* clip avoids horizontal scroll without creating a scroll container that breaks position:sticky */
+  overflow-x: clip;
   max-width: 100vw;
 }
 
@@ -21,7 +22,7 @@ body {
   background: #FFFFFF;
   color: #0A0A0A;
   font-family: CNN, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100vw;
   position: relative;
 }
@@ -71,6 +72,27 @@ body {
   }
 }
 
+/*
+ * Admin / editor / advertiser shells must span the full viewport.
+ * Pathname-based class on <main> plus :has() beats any stray .cnn-container on <main>.
+ */
+main.app-chrome-main,
+main:has([data-app-chrome-shell]) {
+  max-width: none;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
+  box-sizing: border-box;
+}
+
+/* Header sits outside <main>; mirror full-bleed nav when admin/editor shell is mounted */
+body:has([data-app-chrome-shell]) .cnn-nav-rail .header__container {
+  max-width: none;
+  width: 100%;
+}
+
 /* Article Content Styling */
 .article-content {
   color: #4D4D4D;
@@ -117,6 +139,14 @@ body {
   margin: 1.5em 0;
   font-style: italic;
   color: #666;
+}
+
+/* Imported / pasted HTML sometimes includes a second site header or top ad shell */
+.article-content .cnn-header-sticky-root,
+.article-content .ad-slot-header__wrapper,
+.article-content .cnn-header-wrapper-outer,
+.article-content [data-uri*="ad-slot-header"] {
+  display: none !important;
 }
 
 /* CNN Color System */

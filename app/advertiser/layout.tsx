@@ -58,7 +58,7 @@ export default function AdvertiserLayout({ children }: { children: React.ReactNo
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div data-app-chrome-shell className="flex min-h-screen w-full min-w-0 bg-gray-100">
       {/* Desktop Sidebar */}
       <div className="hidden lg:block">
         <AdvertiserSidebar isCollapsed={isCollapsed} onToggleCollapse={handleToggleCollapse} />

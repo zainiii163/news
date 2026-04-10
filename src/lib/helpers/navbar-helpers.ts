@@ -55,7 +55,7 @@ export function isActiveRoute(pathname: string, route: string): boolean {
   
   // For category routes, use exact matching or allow trailing slash
   // This prevents false matches when one category slug is a prefix of another
-  if (route.startsWith("/category/")) {
+  if (route.startsWith("/category/") || route.startsWith("/categories/")) {
     // Exact match or match with trailing slash (for nested routes)
     return pathname === route || pathname === route + "/" || pathname.startsWith(route + "/");
   }

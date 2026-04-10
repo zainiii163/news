@@ -4,6 +4,7 @@ import { usePopularTGVideos } from "@/lib/hooks/useTG";
 import { Loading } from "@/components/ui/loading";
 import { ErrorMessage } from "@/components/ui/error-message";
 import Link from "next/link";
+import { categorySectionHref } from "@/lib/helpers/category-routes";
 import { formatDate } from "@/lib/helpers/formatDate";
 import { TGVideosResponse } from "@/lib/api/modules/tg.api";
 import Image from "next/image";
@@ -135,7 +136,7 @@ export function FeaturedVideoSection() {
                 <span>{formatDate(featuredVideo.news.createdAt, "MMM dd, yyyy")}</span>
                 {featuredVideo.news.category && (
                   <Link
-                    href={`/category/${featuredVideo.news.category.slug}`}
+                    href={categorySectionHref(featuredVideo.news.category.slug)}
                     className="hover:text-red-600 transition"
                   >
                     {featuredVideo.news.category.nameEn}

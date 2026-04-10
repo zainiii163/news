@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useLanguage } from "@/providers/LanguageProvider";
 import { useAuth } from "@/providers/AuthProvider";
 import { usePathname } from "next/navigation";
+import { categorySectionHref } from "@/lib/helpers/category-routes";
 
 // CNN-style font family
 const CNN_FONT = '"CNN", "Helvetica Neue", Helvetica, Arial, sans-serif';
@@ -33,18 +34,18 @@ const HEADER_CONFIG = {
 
 // TG Calabria Menu Items with bilingual support - CNN navigation structure
 const TG_CALABRIA_MENU_ITEMS = [
-  { nameEn: "US", nameIt: "USA", href: "/category/us" },
-  { nameEn: "World", nameIt: "Mondo", href: "/category/world" },
-  { nameEn: "Politics", nameIt: "Politica", href: "/category/politics" },
-  { nameEn: "Business", nameIt: "Economia", href: "/category/business" },
-  { nameEn: "Health", nameIt: "Salute", href: "/category/health" },
-  { nameEn: "Entertainment", nameIt: "Intrattenimento", href: "/category/entertainment" },
-  { nameEn: "Style", nameIt: "Stile", href: "/category/style" },
-  { nameEn: "Travel", nameIt: "Viaggi", href: "/category/travel" },
-  { nameEn: "Sports", nameIt: "Sport", href: "/category/sport" },
-  { nameEn: "Science", nameIt: "Scienza", href: "/category/science" },
-  { nameEn: "Climate", nameIt: "Clima", href: "/category/climate" },
-  { nameEn: "Weather", nameIt: "Tempo", href: "/category/weather" },
+  { nameEn: "US", nameIt: "USA", href: categorySectionHref("us") },
+  { nameEn: "World", nameIt: "Mondo", href: categorySectionHref("world") },
+  { nameEn: "Politics", nameIt: "Politica", href: categorySectionHref("politics") },
+  { nameEn: "Business", nameIt: "Economia", href: categorySectionHref("business") },
+  { nameEn: "Health", nameIt: "Salute", href: categorySectionHref("health") },
+  { nameEn: "Entertainment", nameIt: "Intrattenimento", href: categorySectionHref("entertainment") },
+  { nameEn: "Style", nameIt: "Stile", href: categorySectionHref("style") },
+  { nameEn: "Travel", nameIt: "Viaggi", href: categorySectionHref("travel") },
+  { nameEn: "Sports", nameIt: "Sport", href: categorySectionHref("sport") },
+  { nameEn: "Science", nameIt: "Scienza", href: categorySectionHref("science") },
+  { nameEn: "Climate", nameIt: "Clima", href: categorySectionHref("climate") },
+  { nameEn: "Weather", nameIt: "Tempo", href: categorySectionHref("weather") },
   { nameEn: "Winter Olympics 2026", nameIt: "Olimpiadi Invernali 2026", href: "/sport/milan-cortina-winter-olympics-2026" },
   { nameEn: "Ukraine-Russia War", nameIt: "Guerra Ucraina-Russia", href: "/world/europe/ukraine" },
   { nameEn: "Israel-Hamas War", nameIt: "Guerra Israele-Hamas", href: "/world/middleeast/israel" },
@@ -73,6 +74,9 @@ export function CNNHeader() {
   const [currentAdSize, setCurrentAdSize] = useState(AD_SIZES.DESKTOP.HEADER);
   const [isAdLoaded, setIsAdLoaded] = useState(false);
   const [viewportWidth, setViewportWidth] = useState(0);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [scrollDirection, setScrollDirection] = useState<'up' | 'down' | null>(null);
+  const tickingRef = useRef(false);
   
   // Set isMounted to true after hydration to avoid hydration mismatch
   useEffect(() => {
@@ -101,20 +105,65 @@ export function CNNHeader() {
     return () => clearTimeout(timer);
   }, []);
   
-  // CNN Sticky Header Logic - Exact CNN behavior
+  // CNN Sticky Header Logic - Fixed to prevent vibration
   useEffect(() => {
-    const handleScroll = () => {
+    let lastKnownScrollY = window.scrollY;
+    let headerState = lastKnownScrollY > HEADER_CONFIG.STICKY_THRESHOLD;
+    let ticking = false;
+    let lastScrollTime = Date.now();
+    
+    const updateHeaderState = () => {
       const currentScrollY = window.scrollY;
-      setScrollY(currentScrollY);
+      const now = Date.now();
       
-      // Make header sticky when scrolling past threshold
-      if (currentScrollY > HEADER_CONFIG.STICKY_THRESHOLD) {
-        setIsHeaderSticky(true);
-      } else {
-        setIsHeaderSticky(false);
+      // Throttle scroll updates to prevent vibration
+      if (now - lastScrollTime < 16) { // ~60fps throttle
+        return;
+      }
+      
+      const scrollDelta = Math.abs(currentScrollY - lastKnownScrollY);
+      
+      // Only update if scroll is significant and time has passed
+      if (scrollDelta > 3) {
+        // Determine scroll direction
+        if (currentScrollY > lastKnownScrollY) {
+          setScrollDirection('down');
+        } else if (currentScrollY < lastKnownScrollY) {
+          setScrollDirection('up');
+        }
+        
+        setScrollY(currentScrollY);
+        lastKnownScrollY = currentScrollY;
+        
+        // Make header sticky when scrolling past threshold
+        const shouldBeSticky = currentScrollY > HEADER_CONFIG.STICKY_THRESHOLD;
+        if (shouldBeSticky !== headerState) {
+          setIsHeaderSticky(shouldBeSticky);
+          headerState = shouldBeSticky;
+        }
+        
+        lastScrollTime = now;
+      }
+      
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          updateHeaderState();
+        });
+        ticking = true;
       }
     };
     
+    // Initialize with current scroll position (defer setState — not sync inside effect body)
+    queueMicrotask(() => {
+      const y = window.scrollY;
+      setScrollY(y);
+      setIsHeaderSticky(y > HEADER_CONFIG.STICKY_THRESHOLD);
+    });
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -269,7 +318,9 @@ export function CNNHeader() {
           height: `${HEADER_CONFIG.WRAPPER_HEIGHT}px`, 
           top: `${HEADER_CONFIG.WRAPPER_TOP}px`, 
           marginBottom: '0px', 
-          position: 'sticky' 
+          position: 'sticky',
+          transition: 'top 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          zIndex: isHeaderSticky ? 1000 : 1
         }}
       >
         <div className="header__wrapper-inner" data-editable="header">

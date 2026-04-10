@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { cookies } from "next/headers";
 import { fetchNews, fetchHomepageLayout } from "@/lib/api/server-api";
 import { seoApi } from "@/lib/api/modules/seo.api";
 import { News } from "@/types/news.types";
@@ -7,7 +6,6 @@ import { HomepageSection } from "@/lib/api/modules/homepage.api";
 import { mapSEOToNextMetadata } from "@/lib/helpers/metadataMapper";
 import { HomeClient } from "@/components/home/home-client";
 import { API_CONFIG } from "@/lib/api/apiConfig";
-import { getServerLanguage } from "@/lib/i18n/server";
 import { getDefaultMetadata } from "@/lib/i18n/metadata";
 
 // ISR: Revalidate homepage every 60 seconds
@@ -15,9 +13,8 @@ import { getDefaultMetadata } from "@/lib/i18n/metadata";
 export const revalidate = 60;
 
 // Generate metadata for homepage (runs on server)
+// Avoid cookies()/headers() here: they conflict with ISR (revalidate) and cause DYNAMIC_SERVER_USAGE in production.
 export async function generateMetadata(): Promise<Metadata> {
-  const language = await getServerLanguage(cookies());
-
   try {
     const response = await seoApi.getHomepageSEO();
     if (response.success && response.data?.data) {
@@ -27,8 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
     console.error("Failed to fetch homepage SEO metadata:", error);
   }
 
-  // Fallback metadata with language support
-  return getDefaultMetadata(language);
+  return getDefaultMetadata("en");
 }
 
 // Server component - fetches data on server

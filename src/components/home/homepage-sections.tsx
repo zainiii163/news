@@ -37,7 +37,12 @@ export function HomepageSections({ sections }: HomepageSectionsProps) {
   }
 
   return (
-    <div className="container_ribbon">
+    <div
+      className="container_ribbon"
+      data-track-zone="homepage_admin_sections"
+      data-uri="cms.local/_components/homepage-sections/instances/admin@published"
+      data-editable="homepage"
+    >
       <div className="cnn-container">
         {sections.map((section) => (
           <HomepageSectionRenderer key={section.id} section={section} />

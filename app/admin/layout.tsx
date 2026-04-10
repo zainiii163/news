@@ -57,7 +57,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div data-app-chrome-shell className="flex min-h-screen w-full min-w-0 bg-gray-100">
       {/* Desktop Sidebar */}
       <div className={cn("hidden lg:block transition-all duration-300 overflow-visible", isCollapsed ? "w-16" : "w-64")} style={{ overflow: 'visible' }}>
         <AdminSidebar isCollapsed={isCollapsed} onToggleCollapse={handleToggleCollapse} />

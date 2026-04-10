@@ -19,12 +19,14 @@ import { useLanguage } from "@/providers/LanguageProvider";
 import { Category, CategoryResponse } from "@/types/category.types";
 import { formatDate } from "@/lib/helpers/formatDate";
 import {
+  categoriesFromApiResponse,
   flattenCategories,
   getRootCategories,
   getSubcategories,
   getCategoryBreadcrumb,
   getCategoryLevel,
 } from "@/lib/helpers/category-helpers";
+import { ApiResponse } from "@/types/api.types";
 
 export default function AdminCategoriesPage() {
   const [search, setSearch] = useState("");
@@ -49,8 +51,9 @@ export default function AdminCategoriesPage() {
   const { showToast } = useToast();
   const { language, t } = useLanguage();
 
-  const categories: Category[] =
-    (data as CategoryResponse | undefined)?.data || [];
+  const categories: Category[] = categoriesFromApiResponse(
+    data as ApiResponse<CategoryResponse> | undefined
+  );
 
   // Flatten categories for filtering and operations (works with both hierarchical and flat data)
   const allCategoriesFlat = useMemo(() => {

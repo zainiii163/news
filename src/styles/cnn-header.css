@@ -8,7 +8,6 @@
   margin-bottom: 0px;
   z-index: 1000;
   background-color: #ffffff;
-  transition: top 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* CNN Sport Banner - Advertisement section */
@@ -29,7 +28,6 @@
   justify-content: center;
   align-items: center;
   height: 276px;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .ad-slot-header__container {
@@ -450,7 +448,7 @@
     display: flex;
   }
   
-  .header__audio-link {
+  .header__audio-link:not(.header__audio-link-desktop) {
     display: none;
   }
 }
@@ -464,7 +462,7 @@
     gap: 12px;
   }
   
-  .header__video-link {
+  .header__video-link:not(.header__video-link-desktop) {
     display: none;
   }
   
@@ -527,5 +525,13 @@
   
   .header__menu-icon {
     display: flex;
+  }
+}
+
+/* Sticky TG/CNN header: keep drawer control visible on desktop (scoped; legacy US header unchanged) */
+@media (min-width: 993px) {
+  .cnn-nav-rail .header__menu-icon,
+  .cnn-nav-rail .header__close-icon {
+    display: flex !important;
   }
 }

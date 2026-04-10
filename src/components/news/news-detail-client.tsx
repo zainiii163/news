@@ -22,8 +22,10 @@ import { useMediaStatus } from "@/lib/hooks/useMediaStatus";
 import { News, NewsDetail } from "@/types/news.types";
 import { StructuredData as StructuredDataType } from "@/types/seo.types";
 import { getImageUrl } from "@/lib/helpers/imageUrl";
+import { categorySectionHref } from "@/lib/helpers/category-routes";
 import { isYouTubeUrl, getYouTubeEmbedUrl } from "@/lib/helpers/youtube";
 import { SidebarListItem } from "@/components/news/sidebar-list-item";
+import { useArticleChrome } from "@/providers/ArticleChromeProvider";
 
 // Helper function to check if breaking news is still fresh (within 1 hour)
 function isBreakingNewsFresh(createdAt: string | Date): boolean {
@@ -31,6 +33,12 @@ function isBreakingNewsFresh(createdAt: string | Date): boolean {
   const created = new Date(createdAt);
   const hoursSinceCreation = (now.getTime() - created.getTime()) / (1000 * 60 * 60);
   return hoursSinceCreation <= 1; // Hide after 1 hour
+}
+
+function estimateReadMinutes(html: string): number {
+  const text = html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  const words = text ? text.split(" ").filter(Boolean).length : 0;
+  return Math.max(1, Math.ceil(words / 200));
 }
 
 interface NewsDetailClientProps {
@@ -57,6 +65,20 @@ export function NewsDetailClient({
   // Type assertion to properly extract NewsDetail from the API response
   const fetchedNews = (newsData as { data?: NewsDetail } | undefined)?.data;
   const news: News | NewsDetail | null = fetchedNews || initialNews;
+  const { setHeaderSectionLabel } = useArticleChrome();
+
+  useEffect(() => {
+    if (!news?.category) {
+      setHeaderSectionLabel(null);
+      return;
+    }
+    const name =
+      language === "it"
+        ? news.category.nameIt?.trim()
+        : news.category.nameEn?.trim();
+    setHeaderSectionLabel(name || null);
+    return () => setHeaderSectionLabel(null);
+  }, [news, language, setHeaderSectionLabel]);
 
   // Fetch structured data for news article
   const [structuredData, setStructuredData] =
@@ -150,6 +172,7 @@ export function NewsDetailClient({
   const categoryName = news.category
     ? language === "it" ? news.category.nameIt : news.category.nameEn
     : "";
+  const readMin = estimateReadMinutes(news.content || "");
   const frontendUrl =
     process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000";
 
@@ -158,70 +181,60 @@ export function NewsDetailClient({
       {structuredData && (
         <StructuredData data={structuredData} id="news-structured-data" />
       )}
-      <div className="container_ribbon -my-6">
-        <div className="cnn-container py-6">
-          <InlineAdProvider>
-            <div className="grid grid-cols-1 lg:grid-cols-10 gap-8">
-              <article className="lg:col-span-7">
-              {/* Breadcrumb */}
-              <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
-                <Link href="/" className="hover:text-red-600 transition">
-                  {t("nav.home")}
-                </Link>
-                <span>/</span>
-                {news.category && (
-                  <>
-                    <Link
-                      href={`/category/${news.category.slug}`}
-                      className="hover:text-red-600 transition"
-                    >
-                      {categoryName}
-                    </Link>
-                    <span>/</span>
-                  </>
-                )}
-                <span className="text-gray-900 font-medium line-clamp-1">
-                  {news.title}
-                </span>
-              </div>
-
-              {/* Category and Date */}
-              <div className="text-sm text-gray-500 border-b border-gray-200 pb-3 mb-4">
-                {news.category && (
+      <div className="cnn-container py-8 md:py-10">
+        <InlineAdProvider>
+          {/* CNN-style: single centered column, no sidebar */}
+          <article className="max-w-[720px] mx-auto">
+              {/* Eyebrow — section · read time (CNN pattern) */}
+              <p
+                className="text-sm mb-3"
+                style={{ color: "#4D4D4D", fontFamily: "CNN, Helvetica Neue, Helvetica, Arial, sans-serif" }}
+              >
+                {news.category ? (
                   <Link
-                    href={`/category/${news.category.slug}`}
-                    className="inline-block text-red-600 font-black uppercase tracking-wider hover:text-red-700 mr-3"
+                    href={categorySectionHref(news.category.slug)}
+                    className="font-semibold text-[#0A0A0A] hover:text-[#CC0000] transition-colors"
                   >
                     {categoryName}
                   </Link>
+                ) : (
+                  <span className="font-semibold text-[#0A0A0A]">
+                    {language === "it" ? "Notizie" : "News"}
+                  </span>
                 )}
+                <span className="mx-2 text-[#B3B3B3]" aria-hidden>
+                  ·
+                </span>
                 <span>
-                  {formatDate(
-                    news.publishedAt || news.createdAt,
-                    "MMMM dd, yyyy"
-                  )}{" "}
-                  • {formatRelativeTime(news.publishedAt || news.createdAt)}
+                  {readMin}{" "}
+                  {language === "it" ? "min di lettura" : "min read"}
                 </span>
-              </div>
+              </p>
 
-              {/* Author and Date */}
-              <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
-                <span className="font-medium">
-                  {t("news.writtenBy")} {news.author?.name || "Editor"}
-                </span>
-                <span>•</span>
-                <span>
-                  {formatDate(
-                    news.publishedAt || news.createdAt,
-                    "MMMM dd, yyyy"
-                  )}
-                </span>
-              </div>
-
-              {/* Title */}
-              <h1 className="text-[40px] font-bold leading-tight mb-4" style={{ color: '#0A0A0A' }}>
+              <h1
+                className="text-3xl sm:text-4xl md:text-[2.5rem] font-bold leading-[1.15] tracking-tight mb-4"
+                style={{ color: "#0A0A0A", fontFamily: "CNN, Helvetica Neue, Helvetica, Arial, sans-serif" }}
+              >
                 {news.title}
               </h1>
+
+              <p
+                className="text-sm mb-5"
+                style={{ color: "#4D4D4D", fontFamily: "CNN, Helvetica Neue, Helvetica, Arial, sans-serif" }}
+              >
+                <span className="font-semibold text-[#0A0A0A]">
+                  {t("news.writtenBy")} {news.author?.name || "Editor"}
+                </span>
+                <span className="mx-2 text-[#B3B3B3]">·</span>
+                <time dateTime={news.publishedAt || news.createdAt}>
+                  {formatDate(
+                    news.publishedAt || news.createdAt,
+                    "MMMM d, yyyy"
+                  )}
+                </time>
+                <span className="mx-2 text-[#B3B3B3]">·</span>
+                <span>{formatRelativeTime(news.publishedAt || news.createdAt)}</span>
+              </p>
 
               {/* Social Share Buttons and Bookmark */}
               <div className="mb-3 flex items-center gap-3">
@@ -378,31 +391,74 @@ export function NewsDetailClient({
               <InlineAdPlacement index={2} />
             </article>
 
-            {/* Sidebar */}
-            <aside className="lg:col-span-3">
-              <div className="sticky top-24 space-y-4">
-                {/* Trending Section */}
-                <div className="bg-white border border-gray-200 rounded-lg p-3">
-                  <h3 className="font-bold text-sm mb-3 pb-2 border-b border-gray-200" style={{ color: '#0A0A0A' }}>
-                    {language === "it" ? "TRENDING" : "TRENDING"}
+          <div className="max-w-[720px] mx-auto mt-8">
+            <InlineAdPlacement index={3} />
+          </div>
+
+          <section className="mt-16 pt-10 border-t border-[#E6E6E6]">
+            <div className="max-w-[1100px] mx-auto">
+              {relatedNews.length > 0 && (
+                <>
+                  <h2
+                    className="text-xl font-bold mb-8"
+                    style={{
+                      color: "#0A0A0A",
+                      fontFamily:
+                        "CNN, Helvetica Neue, Helvetica, Arial, sans-serif",
+                    }}
+                  >
+                    {language === "it"
+                      ? "Altri articoli"
+                      : "More from TG Calabria"}
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10 mb-16">
+                    {relatedNews.slice(0, 6).map((related: News) => (
+                      <Link
+                        key={related.id}
+                        href={`/news/${related.slug || related.id}`}
+                        className="group block"
+                      >
+                        <div className="relative aspect-[16/10] w-full bg-[#F5F5F5] mb-3 overflow-hidden">
+                          {related.mainImage?.trim() ? (
+                            <OptimizedImage
+                              src={getImageUrl(related.mainImage)}
+                              alt={related.title}
+                              fill
+                              className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 360px"
+                            />
+                          ) : null}
+                        </div>
+                        <h3
+                          className="text-base font-bold leading-snug group-hover:text-[#CC0000] transition-colors line-clamp-3"
+                          style={{ color: "#0A0A0A" }}
+                        >
+                          {related.title}
+                        </h3>
+                      </Link>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-[900px] mx-auto">
+                <div>
+                  <h3
+                    className="text-xs font-bold uppercase tracking-widest pb-3 mb-4 border-b border-[#E6E6E6]"
+                    style={{ color: "#0A0A0A" }}
+                  >
+                    {language === "it" ? "In tendenza" : "Trending"}
                   </h3>
                   <SidebarTrending excludeId={news.id} limit={5} />
                 </div>
-
-                {/* Most Read Section */}
-                <div className="bg-white border border-gray-200 rounded-lg p-3">
-                  <h3 className="font-bold text-sm mb-3 pb-2 border-b border-gray-200" style={{ color: '#0A0A0A' }}>
-                    {language === "it" ? "MOST READ" : "MOST READ"}
+                <div>
+                  <h3
+                    className="text-xs font-bold uppercase tracking-widest pb-3 mb-4 border-b border-[#E6E6E6]"
+                    style={{ color: "#0A0A0A" }}
+                  >
+                    {language === "it" ? "Altri suggerimenti" : "Editor picks"}
                   </h3>
-                  <SidebarTrending excludeId={news.id} limit={5} />
-                </div>
-
-                {/* Editor Picks Section */}
-                <div className="bg-white border border-gray-200 rounded-lg p-3">
-                  <h3 className="font-bold text-sm mb-3 pb-2 border-b border-gray-200" style={{ color: '#0A0A0A' }}>
-                    {language === "it" ? "EDITOR PICKS" : "EDITOR PICKS"}
-                  </h3>
-                  <div className="space-y-1">
+                  <div className="space-y-0">
                     {relatedNews.slice(0, 5).map((related: News, index: number) => (
                       <SidebarListItem
                         key={related.id}
@@ -412,11 +468,15 @@ export function NewsDetailClient({
                     ))}
                   </div>
                 </div>
+              </div>
 
-                {/* Sponsored Section */}
-                <div className="bg-white border border-gray-200 rounded-lg p-3">
-                  <h3 className="font-bold text-sm mb-3 pb-2 border-b border-gray-200" style={{ color: '#0A0A0A' }}>
-                    {language === "it" ? "SPONSORED" : "SPONSORED"}
+              {relatedByAuthor.length > 0 && (
+                <div className="max-w-[900px] mx-auto mt-12">
+                  <h3
+                    className="text-xs font-bold uppercase tracking-widest pb-3 mb-4 border-b border-[#E6E6E6]"
+                    style={{ color: "#0A0A0A" }}
+                  >
+                    {language === "it" ? "Sponsorizzato" : "Sponsored"}
                   </h3>
                   <div className="space-y-1">
                     {relatedByAuthor.slice(0, 5).map((related: News, index: number) => (
@@ -425,34 +485,18 @@ export function NewsDetailClient({
                         item={related}
                         index={index}
                         showSponsored={true}
-                        sponsoredLabel={language === "it" ? "Sponsorizzato" : "Sponsored"}
+                        sponsoredLabel={
+                          language === "it" ? "Sponsorizzato" : "Sponsored"
+                        }
                       />
                     ))}
                   </div>
                 </div>
-
-                {/* Advertisement Placeholder */}
-                <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 text-center">
-                  <div className="text-gray-500 text-xs font-medium mb-2">
-                    {language === "it" ? "PUBBLICITÀ" : "ADVERTISEMENT"}
-                  </div>
-                  <div className="bg-gray-200 rounded h-48 flex items-center justify-center">
-                    <span className="text-gray-400 text-xs">
-                      {language === "it" ? "Spazio pubblicitario" : "Ad Space"}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </aside>
-          </div>
-
-          {/* Inline Ad 4 - below article, above Related News */}
-          <div className="mt-3">
-            <InlineAdPlacement index={3} />
-          </div>
-            </InlineAdProvider>
-          </div>
-        </div>
+              )}
+            </div>
+          </section>
+        </InlineAdProvider>
+      </div>
     </>
   );
 }

@@ -11,11 +11,14 @@ export const useNews = (params?: {
   search?: string;
   status?: string;
   refetchInterval?: number;
+  /** When false, skip fetch (e.g. unknown category slug). */
+  enabled?: boolean;
 }) => {
-  const { refetchInterval, ...queryParams } = params || {};
+  const { refetchInterval, enabled = true, ...queryParams } = params || {};
   return useQuery<ApiResponse<NewsResponse>>({
     queryKey: ["news", queryParams],
     queryFn: () => newsApi.getAll(queryParams),
+    enabled,
     refetchInterval: refetchInterval,
     placeholderData: keepPreviousData, // Keep previous data while refetching to prevent data disappearing
     staleTime: 60 * 1000, // 1 minute - data is fresh for 1 minute

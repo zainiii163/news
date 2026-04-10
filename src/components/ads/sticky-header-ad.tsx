@@ -9,7 +9,25 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import { adsApi } from "@/lib/api/modules/ads.api";
 import { getImageUrl } from "@/lib/helpers/imageUrl";
 
-function CnnAdDisplay({ ad, slotId = "ad_bnr_atf_01" }: { ad: Ad; slotId?: string }) {
+const CNN_AD_FONT = 'CNN, "Helvetica Neue", Helvetica, Arial, sans-serif';
+
+/** edition.cnn.com ATF: desktop leaderboard 970×90 (matches DOM `data-ad-slot-rendered-size`); mobile 320×50 */
+const AD_LEADERBOARD = {
+  desktop: { width: 970, height: 90 },
+  mobile: { width: 320, height: 50 },
+} as const;
+
+function CnnAdDisplay({
+  ad,
+  slotId = "ad_bnr_atf_01",
+  renderedSizeDesktop,
+  renderedSizeMobile,
+}: {
+  ad: Ad;
+  slotId?: string;
+  renderedSizeDesktop: string;
+  renderedSizeMobile: string;
+}) {
   const adRef = useRef<HTMLDivElement>(null);
   const impressionTracked = useRef(false);
   const [imageOptimizationFailed, setImageOptimizationFailed] = useState(false);
@@ -54,6 +72,23 @@ function CnnAdDisplay({ ad, slotId = "ad_bnr_atf_01" }: { ad: Ad; slotId?: strin
 
   const shouldUnoptimize = imageOptimizationFailed || isApiDomain;
 
+  const imageEl = (
+    <Image
+      src={imageUrl}
+      alt={ad.title}
+      fill
+      style={{ objectFit: "contain", objectPosition: "center" }}
+      quality={85}
+      loading="eager"
+      priority
+      unoptimized={shouldUnoptimize}
+      sizes="(max-width: 767px) 320px, 970px"
+      onError={() => {
+        if (!imageOptimizationFailed) setImageOptimizationFailed(true);
+      }}
+    />
+  );
+
   return (
     <div
       ref={adRef}
@@ -64,9 +99,9 @@ function CnnAdDisplay({ ad, slotId = "ad_bnr_atf_01" }: { ad: Ad; slotId?: strin
       data-mobile-slot-id={slotId}
       data-ad-label-text="Advertisement"
       data-unselectable="true"
-      data-ad-slot-rendered-size="970x90"
+      data-ad-slot-rendered-size-desktop={renderedSizeDesktop}
+      data-ad-slot-rendered-size-mobile={renderedSizeMobile}
     >
-      {/* Ad Container - CNN style 970x90 */}
       <div id={slotId} className="ad adfuel-rendered">
         {ad.targetLink && ad.targetLink.trim() ? (
           <Link
@@ -74,106 +109,46 @@ function CnnAdDisplay({ ad, slotId = "ad_bnr_atf_01" }: { ad: Ad; slotId?: strin
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleClick}
-            style={{ display: "block" }}
+            className="cnn-atf-creative-frame"
           >
-            <div
-              style={{
-                position: "relative",
-                width: "970px",
-                height: "90px",
-                maxWidth: "100%",
-                backgroundColor: "#000000",
-                overflow: "hidden",
-                margin: "0 auto",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Image
-                src={imageUrl}
-                alt={ad.title}
-                fill
-                style={{ objectFit: "contain", objectPosition: "center" }}
-                quality={85}
-                loading="eager"
-                priority
-                unoptimized={shouldUnoptimize}
-                sizes="970px"
-                onError={() => {
-                  if (!imageOptimizationFailed) setImageOptimizationFailed(true);
-                }}
-              />
-            </div>
+            <div className="cnn-atf-creative-fill">{imageEl}</div>
           </Link>
         ) : (
-          <div
-            style={{
-              position: "relative",
-              width: "970px",
-              height: "90px",
-              maxWidth: "100%",
-              backgroundColor: "#000000",
-              overflow: "hidden",
-              margin: "0 auto",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Image
-              src={imageUrl}
-              alt={ad.title}
-              fill
-              style={{ objectFit: "contain", objectPosition: "center" }}
-              quality={85}
-              loading="eager"
-              priority
-              unoptimized={shouldUnoptimize}
-              sizes="970px"
-              onError={() => {
-                if (!imageOptimizationFailed) setImageOptimizationFailed(true);
-              }}
-            />
+          <div className="cnn-atf-creative-frame">
+            <div className="cnn-atf-creative-fill">{imageEl}</div>
           </div>
         )}
       </div>
 
-      {/* CNN-style feedback bar - exact match */}
-      <div
-        className="ad-slot__feedback ad-feedback-link-container"
-        style={{ 
-          width: "970px", 
-          maxWidth: "100%", 
-          marginTop: "8px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        {/* Left: Advertisement label */}
+      <div className="ad-slot__feedback ad-feedback-link-container cnn-atf-ad-feedback">
         <div
           className="ad-slot__ad-label"
           data-ad-label-text="Advertisement"
           style={{
-            fontSize: "12px",
-            color: "#ffffff",
-            opacity: 0.7,
+            fontFamily: CNN_AD_FONT,
+            fontSize: "11px",
+            fontWeight: 500,
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: "rgba(255, 255, 255, 0.65)",
           }}
         >
           Advertisement
         </div>
 
-        {/* Right: Ad Feedback */}
         <button
+          type="button"
           onClick={handleAdFeedback}
           className="ad-feedback-link"
           data-ad-type="DISPLAY"
           data-ad-identifier={slotId}
           style={{
-            fontSize: "12px",
-            color: "#ffffff",
-            opacity: 0.7,
+            fontFamily: CNN_AD_FONT,
+            fontSize: "11px",
+            fontWeight: 500,
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+            color: "rgba(255, 255, 255, 0.65)",
             display: "flex",
             alignItems: "center",
             gap: "4px",
@@ -181,37 +156,26 @@ function CnnAdDisplay({ ad, slotId = "ad_bnr_atf_01" }: { ad: Ad; slotId?: strin
             background: "transparent",
             border: "none",
             padding: 0,
-            transition: "opacity 0.2s ease",
+            transition: "color 0.15s ease, opacity 0.15s ease",
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
-          onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.7")}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = "rgba(255, 255, 255, 0.95)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = "rgba(255, 255, 255, 0.65)";
+          }}
         >
-          <svg
-            width="14"
-            height="14"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-            />
-          </svg>
           <span className="ad-feedback-link__label">Ad Feedback</span>
         </button>
       </div>
 
-      {/* Resize listener iframe (CNN style) */}
       <iframe
         className="resizeListenerIframe"
         src="about:blank"
         tabIndex={-1}
         frameBorder={0}
         aria-hidden="true"
+        title=""
         style={{
           position: "absolute",
           width: 0,
@@ -223,9 +187,77 @@ function CnnAdDisplay({ ad, slotId = "ad_bnr_atf_01" }: { ad: Ad; slotId?: strin
   );
 }
 
+function PlaceholderSlot({
+  label,
+  renderedSizeDesktop,
+  renderedSizeMobile,
+}: {
+  label: string;
+  renderedSizeDesktop: string;
+  renderedSizeMobile: string;
+}) {
+  return (
+    <div
+      data-uri="cms.cnn.com/_components/ad-slot/instances/cnn-v1@published"
+      className="ad-slot adSlotLoaded"
+      data-path="header/ad-slot-header[0]/items"
+      data-desktop-slot-id="ad_bnr_atf_01"
+      data-mobile-slot-id="ad_bnr_atf_01"
+      data-ad-label-text="Advertisement"
+      data-unselectable="true"
+      data-ad-slot-rendered-size-desktop={renderedSizeDesktop}
+      data-ad-slot-rendered-size-mobile={renderedSizeMobile}
+    >
+      <div id="ad_bnr_atf_01" className="ad" style={{ display: "none" }} aria-hidden />
+      <div className="cnn-atf-creative-frame">
+        <div
+          className="cnn-atf-creative-fill flex items-center justify-center box-border"
+          style={{
+            backgroundColor: "#444444",
+            border: "1px solid #555555",
+          }}
+        >
+          <span
+            style={{
+              fontFamily: CNN_AD_FONT,
+              fontSize: "11px",
+              fontWeight: 500,
+              color: "#666666",
+              letterSpacing: "0.04em",
+              padding: "0 8px",
+              textAlign: "center",
+            }}
+          >
+            {label}
+          </span>
+        </div>
+      </div>
+      <div className="ad-slot__feedback ad-feedback-link-container cnn-atf-ad-feedback">
+        <div
+          className="ad-slot__ad-label"
+          data-ad-label-text="Advertisement"
+          style={{
+            fontFamily: CNN_AD_FONT,
+            fontSize: "11px",
+            fontWeight: 500,
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: "rgba(255, 255, 255, 0.65)",
+          }}
+        >
+          Advertisement
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function StickyHeaderAd() {
   const pathname = usePathname();
   const { data, isLoading, error } = useAdBySlot("TOP_BANNER", 5);
+
+  const renderedSizeDesktop = `${AD_LEADERBOARD.desktop.width}x${AD_LEADERBOARD.desktop.height}`;
+  const renderedSizeMobile = `${AD_LEADERBOARD.mobile.width}x${AD_LEADERBOARD.mobile.height}`;
 
   const isAdminRoute =
     pathname?.startsWith("/admin") ||
@@ -241,224 +273,32 @@ export function StickyHeaderAd() {
   const hasAds = Array.isArray(rawAds) && rawAds.length > 0;
   const ad = hasAds ? rawAds[0] : null;
 
-  // Always show the ad slot container (black background) even when loading or no ads
-  // This ensures the ad space is visible like CNN
+  if (isLoading) {
+    return (
+      <PlaceholderSlot
+        label="Loading advertisement…"
+        renderedSizeDesktop={renderedSizeDesktop}
+        renderedSizeMobile={renderedSizeMobile}
+      />
+    );
+  }
+
+  if (error || !hasAds || !ad) {
+    return (
+      <PlaceholderSlot
+        label="Advertisement"
+        renderedSizeDesktop={renderedSizeDesktop}
+        renderedSizeMobile={renderedSizeMobile}
+      />
+    );
+  }
+
   return (
-    <div
-      className="ad-slot-header__wrapper"
-      style={{
-        width: "100%",
-        backgroundColor: "#000000",
-        padding: "20px 0",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "290px",
-      }}
-    >
-      <div
-        className="ad-slot-header__container adSlotHeaderContainer"
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          width: "100%",
-          maxWidth: "1200px",
-          margin: "0 auto",
-        }}
-      >
-        {isLoading ? (
-          // Show loading placeholder
-          <div
-            style={{
-              width: "970px",
-              height: "90px",
-              maxWidth: "100%",
-              backgroundColor: "#1a1a1a",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#666",
-              fontSize: "14px",
-            }}
-          >
-            Loading advertisement...
-          </div>
-        ) : hasAds && ad ? (
-          // Show actual ad
-          <CnnAdDisplay ad={ad} slotId="ad_bnr_atf_01" />
-        ) : (
-          // Show CNN-style default banner when no ads available
-          <div
-            style={{
-              width: "970px",
-              height: "250px",
-              maxWidth: "100%",
-              backgroundColor: "#000000",
-              overflow: "hidden",
-              margin: "0 auto",
-              display: "flex",
-              alignItems: "center",
-              position: "relative",
-            }}
-          >
-            {/* CNN Logo and Style text */}
-            <div
-              style={{
-                position: "absolute",
-                left: "20px",
-                top: "15px",
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-              }}
-            >
-              <div
-                style={{
-                  backgroundColor: "#FF0000",
-                  color: "#FFFFFF",
-                  fontWeight: "bold",
-                  fontSize: "18px",
-                  padding: "2px 6px",
-                  fontFamily: "Arial, sans-serif",
-                }}
-              >
-                CNN
-              </div>
-              <div
-                style={{
-                  color: "#FFFFFF",
-                  fontSize: "14px",
-                  fontWeight: "normal",
-                  fontFamily: "Arial, sans-serif",
-                }}
-              >
-                style
-              </div>
-            </div>
-
-            {/* Advertisement text */}
-            <div
-              style={{
-                position: "absolute",
-                left: "20px",
-                bottom: "12px",
-                color: "#999999",
-                fontSize: "10px",
-                fontFamily: "Arial, sans-serif",
-                textTransform: "uppercase",
-              }}
-            >
-              Advertisement
-            </div>
-
-            {/* Main content area */}
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                width: "100%",
-                paddingLeft: "120px",
-                paddingRight: "20px",
-              }}
-            >
-              {/* Image placeholder */}
-              <div
-                style={{
-                  width: "200px",
-                  height: "180px",
-                  backgroundColor: "#FFD700",
-                  backgroundImage: "linear-gradient(135deg, #FFD700 0%, #FF6B6B 100%)",
-                  borderRadius: "4px",
-                  marginRight: "30px",
-                  position: "relative",
-                  overflow: "hidden",
-                }}
-              >
-                {/* Silhouette figures */}
-                <div
-                  style={{
-                    position: "absolute",
-                    bottom: "0",
-                    left: "20px",
-                    width: "50px",
-                    height: "120px",
-                    backgroundColor: "#000000",
-                    borderRadius: "25px 25px 0 0",
-                  }}
-                />
-                <div
-                  style={{
-                    position: "absolute",
-                    bottom: "0",
-                    left: "90px",
-                    width: "45px",
-                    height: "110px",
-                    backgroundColor: "#000000",
-                    borderRadius: "22px 22px 0 0",
-                  }}
-                />
-              </div>
-
-              {/* Text content */}
-              <div
-                style={{
-                  flex: 1,
-                  color: "#FFFFFF",
-                  fontFamily: "Arial, sans-serif",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "24px",
-                    fontWeight: "bold",
-                    marginBottom: "8px",
-                    lineHeight: "1.2",
-                  }}
-                >
-                  The global view on style & culture
-                </div>
-              </div>
-
-              {/* CTA Button */}
-              <div
-                style={{
-                  backgroundColor: "#FF0000",
-                  color: "#FFFFFF",
-                  padding: "12px 24px",
-                  borderRadius: "6px",
-                  fontSize: "16px",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  fontFamily: "Arial, sans-serif",
-                  transition: "background-color 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "#CC0000";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "#FF0000";
-                }}
-              >
-                {/* Play icon */}
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  style={{ marginLeft: "2px" }}
-                >
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-                INSPIRE ME
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
+    <CnnAdDisplay
+      ad={ad}
+      slotId="ad_bnr_atf_01"
+      renderedSizeDesktop={renderedSizeDesktop}
+      renderedSizeMobile={renderedSizeMobile}
+    />
   );
 }

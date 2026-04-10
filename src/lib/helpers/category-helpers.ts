@@ -1,4 +1,5 @@
-import { Category } from "@/types/category.types";
+import { Category, CategoryResponse } from "@/types/category.types";
+import { ApiResponse } from "@/types/api.types";
 
 /**
  * Recursively flatten hierarchical categories into a flat array
@@ -296,5 +297,31 @@ export function filterCategoriesByLevel(
  */
 export function buildCategoryTree(categories: Category[]): Category[] {
   return getCategoryTree(categories);
+}
+
+/**
+ * Normalize the category list from GET /categories whether the backend returns
+ * `data: Category[]` or wraps again as `data: { data: Category[] }`.
+ */
+export function categoriesFromApiResponse(
+  res: ApiResponse<CategoryResponse> | CategoryResponse | undefined | null
+): Category[] {
+  if (res == null) return [];
+  const mid = "data" in res ? res.data : undefined;
+  // Treat null/undefined the same — API often sends `data: null` on errors/empty.
+  if (mid == null) {
+    if (Array.isArray(res)) return res as Category[];
+    return [];
+  }
+  if (Array.isArray(mid)) return mid as Category[];
+  if (typeof mid !== "object") return [];
+  const cr = mid as CategoryResponse;
+  return Array.isArray(cr.data) ? cr.data : [];
+}
+
+/** Categories that have a non-empty slug (valid `/categories/:slug` or `/category/:slug` target). */
+export function categoriesWithSlug(categories: Category[] | null | undefined): Category[] {
+  if (!Array.isArray(categories) || categories.length === 0) return [];
+  return categories.filter((c) => c && String(c.slug || "").trim().length > 0);
 }
 

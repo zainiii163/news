@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useUsers, useCreateUser, useUpdateUser, useDeleteUser } from "@/lib/hooks/useUser";
 import { UserResponse } from "@/types/user.types";
 import { useCategories } from "@/lib/hooks/useCategories";
@@ -14,6 +14,8 @@ import { InputWithClear } from "@/components/ui/input-with-clear";
 import { useLanguage } from "@/providers/LanguageProvider";
 import { User } from "@/types/user.types";
 import { CategoryResponse } from "@/types/category.types";
+import { ApiResponse } from "@/types/api.types";
+import { categoriesFromApiResponse } from "@/lib/helpers/category-helpers";
 import { formatDate } from "@/lib/helpers/formatDate";
 
 export default function AdminUsersPage() {
@@ -36,6 +38,14 @@ export default function AdminUsersPage() {
 
   // Fetch categories for assignment
   const { data: categoriesData } = useCategories(true);
+
+  const categoriesList = useMemo(
+    () =>
+      categoriesFromApiResponse(
+        categoriesData as ApiResponse<CategoryResponse> | undefined
+      ),
+    [categoriesData]
+  );
 
   const createMutation = useCreateUser();
   const updateMutation = useUpdateUser();
@@ -346,7 +356,7 @@ export default function AdminUsersPage() {
       {isCreateModalOpen && (
         <UserFormModal
           user={editingUser}
-          categories={(categoriesData as CategoryResponse | undefined)?.data || []}
+          categories={categoriesList}
           onSubmit={handleSubmit}
           onClose={() => {
             setIsCreateModalOpen(false);

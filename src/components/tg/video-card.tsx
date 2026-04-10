@@ -3,6 +3,7 @@
 import { TGVideo } from "@/lib/api/modules/tg.api";
 import { VideoPlayer } from "@/components/ui/video-player";
 import Link from "next/link";
+import { categorySectionHref } from "@/lib/helpers/category-routes";
 import Image from "next/image";
 import { formatDate } from "@/lib/helpers/formatDate";
 
@@ -102,7 +103,7 @@ export function VideoCard({ video, className = "", showFullPlayer = false }: Vid
           <span>{formatDate(video.news.createdAt, "MMM dd, yyyy")}</span>
           {video.news.category && (
             <Link
-              href={`/category/${video.news.category.slug}`}
+              href={categorySectionHref(video.news.category.slug)}
               className="hover:text-red-600 transition"
             >
               {video.news.category.nameEn}

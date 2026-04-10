@@ -22,6 +22,8 @@ import {
   NewsResponse,
 } from "@/types/news.types";
 import { CategoryResponse } from "@/types/category.types";
+import { ApiResponse } from "@/types/api.types";
+import { categoriesFromApiResponse } from "@/lib/helpers/category-helpers";
 import { SocialPlatform, SocialPostLog } from "@/types/social.types";
 import { formatDate } from "@/lib/helpers/formatDate";
 import { useToast } from "@/components/ui/toast";
@@ -71,6 +73,14 @@ export default function AdminNewsPage() {
 
   // Fetch categories for filter dropdown
   const { data: categoriesData } = useCategories(true);
+
+  const categoriesList = useMemo(
+    () =>
+      categoriesFromApiResponse(
+        categoriesData as ApiResponse<CategoryResponse> | undefined
+      ),
+    [categoriesData]
+  );
 
   const createMutation = useCreateNews();
   const updateMutation = useUpdateNews();
@@ -397,13 +407,11 @@ export default function AdminNewsPage() {
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">{t("admin.allCategories")}</option>
-              {(categoriesData as CategoryResponse | undefined)?.data?.map(
-                (cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.nameEn}
-                  </option>
-                )
-              )}
+              {categoriesList.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.nameEn}
+                </option>
+              ))}
             </select>
           </div>
           <div className="flex items-end">
@@ -712,9 +720,7 @@ export default function AdminNewsPage() {
       {isCreateModalOpen && (
         <NewsFormModal
           news={editingNews}
-          categories={
-            (categoriesData as CategoryResponse | undefined)?.data || []
-          }
+          categories={categoriesList}
           onSubmit={handleSubmit}
           onClose={() => {
             setIsCreateModalOpen(false);
@@ -731,9 +737,7 @@ export default function AdminNewsPage() {
       {previewNews && (
         <NewsPreviewModal
           news={previewNews}
-          categories={
-            (categoriesData as CategoryResponse | undefined)?.data || []
-          }
+          categories={categoriesList}
           onClose={() => setPreviewNews(null)}
           onOpenInNewTab={() => {
             window.open(

@@ -2,15 +2,12 @@
 
 import { useEffect, useRef, useMemo } from "react";
 import dynamic from "next/dynamic";
-import { BreakingNewsTicker } from "@/components/ui/breaking-news-ticker";
-import { HeroSection } from "./sections/hero-section";
-import { EditorialSections } from "./sections/editorial-sections";
+import { CNNHomepageLayout } from "./cnn-homepage-layout";
 import { useLanguage } from "@/providers/LanguageProvider";
 import { News, NewsResponse } from "@/types/news.types";
 import { ApiResponse } from "@/types/api.types";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { StructuredData as StructuredDataType } from "@/types/seo.types";
-import { InlineAdProvider, InlineAdPlacement } from "@/components/ads/inline-ad-block";
 import { useNewsInfinite } from "@/lib/hooks/useNews";
 import { HomepageSection } from "@/lib/api/modules/homepage.api";
 import { HomepageSections } from "./homepage-sections";
@@ -209,7 +206,6 @@ export function HomeClient({
     }).slice(0, 8);
 
     return {
-      breakingNews: Array.isArray(breakingNews) ? breakingNews : [],
       trendingNews: Array.isArray(trendingNews) ? trendingNews : [],
       heroStory,
       leftColumnStories: Array.isArray(leftColumnStories) ? leftColumnStories : [],
@@ -225,14 +221,11 @@ export function HomeClient({
   return (
     <>
       {structuredData && <StructuredData data={structuredData} />}
-      
-      {/* Breaking News Ticker */}
-      <BreakingNewsTicker breakingNews={newsData.breakingNews} />
 
-      {/* Top Slider (SLIDER_TOP only) - CNN style */}
-      <div className="cnn-container py-1">
-        <SliderAd />
-      </div>
+      {/* Breaking ticker removed — matches CNN article-style layout (single nav under top ad, no extra red bar) */}
+
+      {/* Top Slider (SLIDER_TOP only) — no wrapper when empty; avoids extra gap under the nav */}
+      <SliderAd />
       
       {/* Show loading state only if we have no data at all */}
       {isInfiniteFetching && (!Array.isArray(allNews) || allNews.length === 0) && !isInfiniteError ? (
@@ -275,11 +268,14 @@ export function HomeClient({
         <>
           {/* Render homepage sections if available, otherwise use default CNN layout */}
           {sections && sections.length > 0 ? (
-            <>
+            <div
+              className="layout layout-homepage cnn w-full min-w-0"
+              data-page-type="section"
+            >
               <HomepageSections sections={sections} />
               {/* Infinite Scroll Trigger - Fixed height to prevent footer jumping */}
-              <div 
-                ref={loadMoreRef} 
+              <div
+                ref={loadMoreRef}
                 className="cnn-container mt-6 min-h-[100px] flex items-center justify-center"
               >
                 {isFetchingNextPage && (
@@ -289,39 +285,24 @@ export function HomeClient({
                   </div>
                 )}
               </div>
-            </>
+            </div>
           ) : (
-            /* NEW CNN-STYLE HOMEPAGE LAYOUT */
-            <div className="space-y-0">
-              {/* 3-COLUMN HERO SECTION */}
-              <HeroSection
+            <div
+              className="layout layout-homepage cnn w-full min-w-0"
+              data-page-type="section"
+            >
+              <CNNHomepageLayout
                 heroStory={newsData.heroStory}
-                leftColumnStories={newsData.leftColumnStories}
-                rightColumnStories={newsData.rightColumnStories}
-              />
-              
-              {/* ADVERTISEMENT BELOW HERO */}
-              <div className="cnn-container py-6 flex justify-center">
-                <AdBanner size="leaderboard" />
-              </div>
-              
-              {/* EDITORIAL SECTIONS */}
-              <EditorialSections
                 featuredStories={newsData.featuredGrid}
                 latestStories={newsData.latestStories}
                 categoryStories={newsData.categoryStories}
                 videoStories={newsData.videos}
                 worldStories={newsData.worldStories}
               />
-              
-              {/*ADVERTISEMENT BETWEEN SECTIONS */}
-              <div className="cnn-container py-6 flex justify-center">
-                <AdBanner size="leaderboard" />
-              </div>
-              
+
               {/* Infinite Scroll Trigger */}
-              <div 
-                ref={loadMoreRef} 
+              <div
+                ref={loadMoreRef}
                 className="cnn-container mt-6 min-h-[100px] flex items-center justify-center"
               >
                 {isFetchingNextPage && (

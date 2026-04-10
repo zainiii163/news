@@ -8,6 +8,7 @@ import Link from "next/link";
 import { TYPOGRAPHY } from "@/lib/constants/typography";
 import { News } from "@/types/news.types";
 import { Category } from "@/types/category.types";
+import { categorySectionHref } from "@/lib/helpers/category-routes";
 
 interface CategoryNewsGridProps {
   categoryStories: Record<string, { category: Category; news: News[] }>;
@@ -26,7 +27,7 @@ function CategorySection({ category, news, maxPerCategory = 4 }: {
     <div className="mb-8">
       {/* Section Header */}
       <div className="mb-4">
-        <Link href={`/category/${category.slug}`} className="group block">
+        <Link href={categorySectionHref(category.slug)} className="group block">
           <h2 
             className={`${TYPOGRAPHY.CATEGORY_LABEL.fontSize.className} text-gray-900 border-b-2 border-red-600 pb-1 inline-block group-hover:text-red-600 transition`}
           >
@@ -114,7 +115,7 @@ function CategorySection({ category, news, maxPerCategory = 4 }: {
       {news.length > maxPerCategory && (
         <div className="mt-4">
           <Link
-            href={`/category/${category.slug}`}
+            href={categorySectionHref(category.slug)}
             className="text-sm text-red-600 hover:text-red-700 font-extrabold uppercase tracking-wide transition"
             style={{
               fontSize: '12px',

@@ -1,0 +1,807 @@
+/* CNN Complete Header Styles */
+/* Exact CNN styling with TG CALABRIA branding */
+
+/* edition.cnn.com-style: in-page anchors land below the sticky nav (+ notched devices) */
+html {
+  scroll-padding-top: calc(var(--cnn-nav-rail-min-height, 56px) + env(safe-area-inset-top, 0px));
+  scroll-behavior: smooth;
+}
+
+/* One sticky column: tall black ATF band + white nav (sticky pull = full measured strip height) */
+.cnn-page-header-outer {
+  /* Default until ResizeObserver on `.cnn-sticky-ad-strip` sets inline `--cnn-ad-strip-height` */
+  --cnn-ad-strip-height: 360px;
+  --cnn-nav-rail-min-height: 56px;
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 1000;
+  min-height: calc(var(--cnn-nav-rail-min-height, 56px) + var(--cnn-ad-strip-height, 360px));
+  height: auto;
+  max-height: none;
+  background-color: #ffffff;
+  overflow: visible;
+  transition: none;
+}
+
+/* Pull header up by measured ATF height so the black band scrolls off first */
+.cnn-page-header-outer:has(.cnn-sticky-ad-strip):not(.cnn-page-header-outer--ad-collapsed) {
+  top: calc(env(safe-area-inset-top, 0px) - var(--cnn-ad-strip-height, 360px));
+}
+
+@media (max-width: 767px) {
+  .cnn-page-header-outer:has(.cnn-sticky-ad-strip):not(.cnn-page-header-outer--ad-collapsed) {
+    top: env(safe-area-inset-top, 0px);
+  }
+}
+
+/*
+ * Ad strip uses display:none when collapsed, so the sticky box’s top edge *is* the nav bar.
+ * Do not use negative `top` here (that pattern applies when the ad still occupies layout space).
+ * edition.cnn.com-style: one sticky header; leaderboard hides in-flow, nav stays pinned at `top`.
+ */
+
+.cnn-page-header-outer .header__wrapper-inner {
+  position: relative;
+}
+
+.cnn-sticky-ad-strip {
+  /* Tall billboard band; inner 970×90 creative stays smaller and centered */
+  --cnn-atf-black-band-min-height: clamp(280px, 30dvh, 440px);
+  overflow: hidden;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 0;
+}
+
+/* CNN DOM parity: leaderboard stack inside sticky header (override global .ad-slot-header fixed/276px) */
+/* Billboard frame: proportional height from width (avoids “short wide + tall band” when max-width shrinks) */
+.cnn-sticky-ad-strip .cnn-atf-creative-frame {
+  position: relative;
+  display: block;
+  width: min(100%, 970px);
+  margin: 0 auto;
+  aspect-ratio: 970 / 90;
+  max-height: 90px;
+  /* Letterbox: IAB 970×90; surrounding black is the wrapper */
+  background-color: #000000;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+.cnn-sticky-ad-strip .cnn-atf-creative-fill {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+}
+
+.cnn-sticky-ad-strip .cnn-atf-ad-feedback {
+  width: min(100%, 970px);
+  margin: 10px auto 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+/* Full-width black billboard; slot content centered like CNN hero ATF */
+.cnn-sticky-ad-strip .ad-slot-header__wrapper {
+  position: relative;
+  width: 100%;
+  min-height: var(--cnn-atf-black-band-min-height, clamp(280px, 30dvh, 440px));
+  height: auto;
+  max-height: none;
+  display: flex;
+  flex-direction: column;
+  background: #000000;
+  box-sizing: border-box;
+}
+
+.cnn-sticky-ad-strip .ad-slot-header {
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+  flex: 1 1 auto;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 0;
+  background: #000000;
+}
+
+.cnn-sticky-ad-strip .ad-slot-header__container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: clamp(16px, 3.5dvh, 48px) clamp(16px, 2.4vw, 24px);
+  box-sizing: border-box;
+}
+
+/* Stack creative + labels as one centered column */
+.cnn-sticky-ad-strip .ad-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+}
+
+@media (max-width: 767px) {
+  .cnn-page-header-outer {
+    --cnn-ad-strip-height: 120px;
+    min-height: calc(var(--cnn-nav-rail-min-height, 56px) + var(--cnn-ad-strip-height, 120px));
+  }
+
+  .cnn-sticky-ad-strip .cnn-atf-creative-frame {
+    width: min(100%, 320px);
+    aspect-ratio: 320 / 50;
+    background-color: #000000;
+  }
+
+  .cnn-sticky-ad-strip .cnn-atf-ad-feedback {
+    width: min(100%, 320px);
+  }
+
+  .cnn-sticky-ad-strip .cnn-atf-creative-frame {
+    max-height: none;
+  }
+
+  .cnn-sticky-ad-strip .ad-slot-header__wrapper {
+    min-height: 0;
+    height: auto;
+    max-height: none;
+  }
+
+  .cnn-sticky-ad-strip .ad-slot-header {
+    flex: 0 1 auto;
+    justify-content: flex-start;
+  }
+
+  .cnn-sticky-ad-strip .ad-slot-header__container {
+    padding: 12px 16px 14px;
+  }
+
+  .cnn-sticky-ad-strip .cnn-atf-ad-feedback {
+    margin-top: 8px;
+  }
+}
+
+/* Primary nav: single row (CNN). Wrap was breaking layout with long CMS labels. */
+.cnn-nav-rail .header__inner {
+  position: relative;
+  background-color: #ffffff;
+}
+
+.cnn-nav-rail .header__subnav-mount {
+  position: relative;
+  width: 100%;
+}
+
+.cnn-nav-rail .header__container {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 clamp(12px, 2.4vw, 24px);
+  min-height: 56px;
+  max-width: 1320px;
+  margin: 0 auto;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Admin / editor / advertiser: align with full-bleed main (no centered max-width gutter) */
+.cnn-page-header-outer--full-bleed .cnn-nav-rail .header__container {
+  max-width: none;
+  width: 100%;
+}
+
+.cnn-nav-rail .header__right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
+}
+
+.cnn-nav-rail .header__nav {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  justify-content: flex-start;
+  display: flex;
+}
+
+.cnn-nav-rail .header__nav-container {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  flex: 1 1 auto;
+  max-width: 100%;
+  overflow: visible;
+}
+
+/* Horizontal scroll lives here only so the “More” dropdown (sibling) is not clipped */
+.cnn-nav-rail .header__nav-links-scroll {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  flex: 1 1 auto;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.cnn-nav-rail .header__nav-links-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.cnn-nav-rail .header__nav-item {
+  flex-shrink: 0;
+}
+
+.cnn-nav-rail .header__nav-item-link {
+  font-family: "CNN", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: clamp(13px, 1.1vw, 15px);
+  font-weight: 600;
+  color: #000000;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.15s ease;
+  padding: 8px clamp(6px, 0.9vw, 12px);
+  display: block;
+  border-radius: 4px;
+  position: relative;
+  max-width: min(200px, 28vw);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cnn-nav-rail .header__nav-item-link:hover {
+  color: #cc0000;
+}
+
+.cnn-nav-rail .header__nav-more {
+  flex-shrink: 0;
+  position: relative;
+}
+
+.cnn-nav-rail .header__nav-more-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "CNN", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: clamp(13px, 1.1vw, 15px);
+  font-weight: 600;
+  color: #000000;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  padding: 8px clamp(6px, 0.9vw, 12px);
+  transition: color 0.15s ease;
+  border-radius: 4px;
+  position: relative;
+}
+
+.cnn-nav-rail .header__nav-more-link:hover {
+  color: #cc0000;
+}
+
+.cnn-nav-rail .header__nav-item-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #ffffff;
+  border: 1px solid #e6e6e6;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  z-index: 1100;
+  min-width: min(200px, 85vw);
+  width: max-content;
+  max-width: min(320px, 92vw);
+  max-height: min(70vh, 420px);
+  overflow-y: auto;
+  height: auto;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  pointer-events: none;
+}
+
+.cnn-nav-rail .header__nav-item-dropdown.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.cnn-nav-rail .header__nav-item-dropdown-inner {
+  padding: 8px 0;
+}
+
+.cnn-nav-rail .header__nav-item-dropdown-item {
+  display: block;
+  padding: 10px 18px;
+  font-family: "CNN", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #000000;
+  text-decoration: none;
+  border-bottom: 1px solid #eeeeee;
+  transition: background 0.15s ease, color 0.15s ease;
+  white-space: normal;
+  line-height: 1.35;
+}
+
+.cnn-nav-rail .header__nav-item-dropdown-item:hover {
+  background-color: #f5f5f5;
+  color: #cc0000;
+}
+
+.cnn-nav-rail .header__nav-item-dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.cnn-nav-rail .header__nav-item-link--active {
+  color: #cc0000;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.cnn-nav-rail .header__nav-item-dropdown-item--active {
+  color: #cc0000;
+  font-weight: 600;
+}
+
+.cnn-nav-rail .header__nav-more--toggle-caret {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cnn-nav-rail .header__nav-more--toggle-caret-down::after {
+  content: " ▼";
+  font-size: 10px;
+  opacity: 0.75;
+}
+
+.cnn-nav-rail .header__nav-more--toggle-caret-up::after {
+  content: " ▲";
+  font-size: 10px;
+  opacity: 0.75;
+}
+
+/* Strip is removed from flow when collapsed; do not keep min-height for the old ad band or a white gap sits under the nav */
+.cnn-page-header-outer.cnn-page-header-outer--ad-collapsed {
+  min-height: var(--cnn-nav-rail-min-height, 56px);
+}
+
+.cnn-page-header-outer--ad-collapsed .cnn-sticky-ad-strip {
+  pointer-events: none;
+  visibility: hidden;
+  display: none;
+}
+
+.cnn-nav-rail {
+  position: relative;
+  background-color: #ffffff;
+  z-index: 2;
+  isolation: isolate;
+}
+
+/* CNN header DOM: one bottom edge (avoid double rule from .header + hr) */
+.cnn-nav-rail nav.header {
+  background-color: #ffffff;
+  border-bottom: none;
+  font-family: "CNN", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  position: relative;
+  z-index: 999;
+}
+
+.cnn-nav-rail .header__navigation-separator {
+  border: none;
+  border-top: 1px solid #e6e6e6;
+  margin: 0;
+}
+
+/* Primary column must shrink so category rail can scroll; base .header__left is flex-shrink: 0 */
+.cnn-nav-rail .header__left.cnn-header-primary-cluster {
+  flex: 1 1 auto !important;
+  min-width: 0;
+  overflow: visible;
+}
+
+.cnn-nav-rail .header__brand-cluster {
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cnn-page-header-outer {
+    transition: none;
+  }
+}
+
+/* Base CNN Font */
+.cnn-header-wrapper-outer,
+.cnn-header-wrapper-outer * {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* Header Container */
+.cnn-header-wrapper-outer {
+  box-sizing: border-box;
+}
+
+.cnn-header-exact {
+  box-sizing: border-box;
+}
+
+.cnn-header-container {
+  box-sizing: border-box;
+}
+
+/* Logo Styling */
+.brand-logo__logo-link {
+  text-decoration: none;
+  outline: none;
+}
+
+.brand-logo__logo-link:focus {
+  outline: 2px solid #CC0000;
+  outline-offset: 2px;
+}
+
+.brand-logo__logo {
+  transition: all 0.15s ease;
+}
+
+.brand-logo__logo:hover {
+  transform: scale(1.02);
+  box-shadow: 0 2px 8px rgba(204, 0, 0, 0.3);
+}
+
+/* Navigation Links — primary row lives in .cnn-navbar__scroll-row */
+.cnn-navbar__scroll-row > a,
+.cnn-navbar > a {
+  position: relative;
+  background-color: #ffffff;
+  text-decoration: none;
+  outline: none;
+  transition: color 0.15s ease;
+}
+
+.cnn-navbar {
+  position: relative;
+  z-index: 3;
+  background-color: #ffffff;
+}
+
+.cnn-navbar__scroll-row {
+  position: relative;
+  z-index: 3;
+  background-color: #ffffff;
+}
+
+.cnn-navbar__scroll-row > a:focus,
+.cnn-navbar > a:focus {
+  outline: 2px solid #cc0000;
+  outline-offset: 2px;
+}
+
+.cnn-navbar__scroll-row > a::after,
+.cnn-navbar > a::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #cc0000;
+  transition: width 0.15s ease;
+}
+
+.cnn-navbar__scroll-row > a:hover::after,
+.cnn-navbar > a:hover::after {
+  width: 100%;
+}
+
+/* More Dropdown */
+.cnn-more-dropdown button {
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.cnn-more-dropdown button:focus {
+  outline: 2px solid #CC0000;
+  outline-offset: 2px;
+}
+
+.cnn-dropdown-menu {
+  animation: dropdownFadeIn 0.2s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cnn-dropdown-menu a {
+  text-decoration: none;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.cnn-dropdown-menu a:focus {
+  outline: 2px solid #CC0000;
+  outline-offset: -2px;
+}
+
+/* Header Right Actions */
+.header__right button {
+  outline: none;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.header__right button:focus {
+  outline: 2px solid #CC0000;
+  outline-offset: 2px;
+}
+
+.header__right button:hover {
+  transform: scale(1.05);
+}
+
+.header__right a {
+  text-decoration: none;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.header__right a:focus {
+  outline: 2px solid #CC0000;
+  outline-offset: 2px;
+}
+
+/* Mobile Menu Button */
+.lg\:hidden button {
+  outline: none;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.lg\:hidden button:focus {
+  outline: 2px solid #CC0000;
+  outline-offset: 2px;
+}
+
+.lg\:hidden button:hover {
+  background-color: rgba(204, 0, 0, 0.1);
+}
+
+/* Mobile Menu */
+.cnn-mobile-menu-overlay {
+  animation: slideInFromTop 0.3s ease-out;
+}
+
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cnn-mobile-menu-overlay a {
+  text-decoration: none;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.cnn-mobile-menu-overlay a:focus {
+  outline: 2px solid #CC0000;
+  outline-offset: 2px;
+}
+
+.cnn-mobile-menu-overlay a:hover {
+  background-color: rgba(204, 0, 0, 0.05);
+}
+
+/* Advertisement Section */
+.cnn-advertisement-wrapper {
+  box-sizing: border-box;
+}
+
+.cnn-advertisement-container {
+  box-sizing: border-box;
+}
+
+.cnn-ad-slot {
+  transition: all 0.15s ease;
+}
+
+.cnn-ad-slot:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.cnn-ad-feedback {
+  transition: all 0.15s ease;
+}
+
+.cnn-ad-feedback:hover {
+  background-color: rgba(0, 0, 0, 0.95) !important;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .cnn-header-container {
+    padding: 0 16px;
+  }
+  
+  .header__right {
+    gap: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .cnn-header-container {
+    padding: 0 12px;
+  }
+  
+  .header__right {
+    gap: 12px;
+  }
+  
+  .brand-logo__logo {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+}
+
+@media (max-width: 640px) {
+  .cnn-header-container {
+    padding: 0 8px;
+  }
+  
+  .header__right {
+    gap: 8px;
+  }
+  
+  .header__right button {
+    padding: 2px;
+  }
+  
+  .header__right button svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .cnn-header-exact {
+    border-bottom: 2px solid #000000;
+  }
+  
+  .cnn-navbar__scroll-row > a,
+  .cnn-navbar > a {
+    font-weight: 600;
+  }
+  
+  .header__right button {
+    border: 1px solid #000000;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .cnn-header-wrapper-outer,
+  .cnn-header-exact,
+  .brand-logo__logo,
+  .cnn-navbar__scroll-row > a,
+  .cnn-navbar > a,
+  .cnn-more-dropdown button,
+  .cnn-dropdown-menu,
+  .cnn-dropdown-menu a,
+  .header__right button,
+  .header__right a,
+  .lg\:hidden button,
+  .cnn-mobile-menu-overlay,
+  .cnn-mobile-menu-overlay a,
+  .cnn-ad-slot,
+  .cnn-ad-feedback {
+    transition: none;
+    animation: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .cnn-header-wrapper-outer,
+  .cnn-page-header-outer {
+    position: static;
+    height: auto;
+  }
+  
+  .cnn-advertisement-wrapper {
+    display: none;
+  }
+  
+  .header__right {
+    display: none;
+  }
+  
+  .lg\:hidden {
+    display: none;
+  }
+}
+
+/* Focus visible for better accessibility */
+.cnn-navbar__scroll-row > a:focus-visible,
+.cnn-navbar > a:focus-visible,
+.cnn-more-dropdown a:focus-visible,
+.header__right button:focus-visible,
+.header__right a:focus-visible,
+.lg\:hidden button:focus-visible,
+.cnn-mobile-menu-overlay a:focus-visible {
+  outline: 2px solid #CC0000;
+  outline-offset: 2px;
+}
+
+/* Prevent horizontal overflow without breaking position:sticky (see app/globals.css) */
+body {
+  overflow-x: clip;
+}
+
+/* Ensure proper z-index stacking */
+.cnn-header-wrapper-outer {
+  z-index: 1000;
+}
+
+.cnn-mobile-menu-overlay {
+  z-index: 999;
+}
+
+/* Loading states */
+.cnn-ad-loading {
+  animation: pulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  from {
+    opacity: 0.6;
+  }
+  to {
+    opacity: 1;
+  }
+}

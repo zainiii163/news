@@ -5,6 +5,13 @@ import { HomepageSection, CreateHomepageSectionInput } from "@/lib/api/modules/h
 import { FormField } from "@/components/ui/form-field";
 import { useLanguage } from "@/providers/LanguageProvider";
 import { useCategories } from "@/lib/hooks/useCategories";
+import {
+  categoriesFromApiResponse,
+  categoriesWithSlug,
+  flattenCategories,
+} from "@/lib/helpers/category-helpers";
+import { CategoryResponse } from "@/types/category.types";
+import { ApiResponse } from "@/types/api.types";
 
 interface SectionFormModalProps {
   section?: HomepageSection | null;
@@ -21,7 +28,13 @@ export function SectionFormModal({
 }: SectionFormModalProps) {
   const { language } = useLanguage();
   const { data: categoriesData } = useCategories(true);
-  const categories = categoriesData?.data || [];
+  const categoryBlockOptions = categoriesWithSlug(
+    flattenCategories(
+      categoriesFromApiResponse(
+        categoriesData as ApiResponse<CategoryResponse> | undefined
+      )
+    )
+  );
 
   const initialFormData = useMemo<CreateHomepageSectionInput>(() => {
     if (section) {
@@ -159,7 +172,7 @@ export function SectionFormModal({
                       <option value="">
                         {language === "it" ? "Seleziona categoria" : "Select category"}
                       </option>
-                      {categories.map((cat) => (
+                      {categoryBlockOptions.map((cat) => (
                         <option key={cat.id} value={cat.slug}>
                           {language === "it" ? cat.nameIt : cat.nameEn}
                         </option>

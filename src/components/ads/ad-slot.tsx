@@ -13,7 +13,7 @@ import {
 } from "@/lib/helpers/ad-rotation";
 import { Ad, AdResponse } from "@/types/ads.types";
 
-interface AdSlotProps {
+export interface AdSlotProps {
   slot:
     | "HEADER"
     | "SIDEBAR"
@@ -28,6 +28,8 @@ interface AdSlotProps {
     | "BETWEEN_SECTIONS_3";
   className?: string;
 }
+
+export type AdSlotName = AdSlotProps["slot"];
 
 export function AdSlot({ slot, className = "" }: AdSlotProps) {
   const pathname = usePathname();
@@ -180,4 +182,32 @@ export function AdSlot({ slot, className = "" }: AdSlotProps) {
   }
 
   return null;
+}
+
+/** CNN-style labeled band for homepage / category / listing pages */
+export function CnnLabeledAdStrip({
+  slot,
+  subtitle = "Sponsored",
+}: {
+  slot: AdSlotName;
+  subtitle?: string;
+}) {
+  return (
+    <div className="zone zone--t-light py-6 border-t border-[#e6e6e6]">
+      <div className="zone__inner max-w-4xl mx-auto px-4 sm:px-6">
+        <div className="bg-[#fafafa] border border-[#e6e6e6] rounded-lg p-4 sm:p-6">
+          <div className="flex items-center justify-between gap-3 mb-4">
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="w-2 h-2 bg-[#cc0000] rounded-full shrink-0" />
+              <h3 className="cnn-hp-section-heading">Advertisement</h3>
+            </div>
+            <span className="cnn-hp-meta shrink-0">{subtitle}</span>
+          </div>
+          <div className="bg-white rounded-md border border-[#eee] shadow-sm">
+            <AdSlot slot={slot} className="w-full" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }

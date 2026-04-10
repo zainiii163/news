@@ -2,18 +2,12 @@ import { Metadata } from "next";
 import { fetchNews } from "@/lib/api/server-api";
 import { News } from "@/types/news.types";
 import { API_CONFIG } from "@/lib/api/apiConfig";
-import { getServerLanguage } from "@/lib/i18n/server";
-import { cookies } from "next/headers";
 import { NewsListingClient } from "@/components/news/news-listing-client";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const language = await getServerLanguage(cookies());
   return {
-    title: language === "it" ? "Tutte le Notizie | TG CALABRIA" : "All News | TG CALABRIA",
-    description:
-      language === "it"
-        ? "Leggi tutte le ultime notizie su TG CALABRIA"
-        : "Read all the latest news on TG CALABRIA",
+    title: "All News | TG CALABRIA",
+    description: "Read all the latest news on TG CALABRIA",
   };
 }
 

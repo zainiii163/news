@@ -1,42 +1,14 @@
 import { Metadata } from "next";
-import { cookies } from "next/headers";
 import { NewsDetailClient } from "@/components/news/news-detail-client";
 import { mapSEOToNextMetadata } from "@/lib/helpers/metadataMapper";
 import { API_CONFIG } from "@/lib/api/apiConfig";
 import { fetchNews } from "@/lib/api/server-api";
 import { News } from "@/types/news.types";
-import { getServerLanguage } from "@/lib/i18n/server";
-import { getDefaultMetadata } from "@/lib/i18n/metadata";
 
-// ISR: Revalidate news articles every 60 seconds
-// News articles are statically generated and cached, refreshed periodically
-export const revalidate = 60;
-
-// Generate static params for news articles at build time
-// This pre-generates popular/recent articles for faster initial load
-// Limited to 50 articles to avoid large cache issues
-export async function generateStaticParams() {
-  try {
-    // Fetch recent published news to pre-generate
-    // Limit to 50 to avoid cache size issues (2MB limit per item)
-    const newsData = await fetchNews({
-      status: "PUBLISHED",
-      limit: 50, // Reduced from 100 to avoid cache size warnings
-    });
-    
-    const news = newsData?.data?.news || [];
-    
-    // Return array of params for static generation
-    // Using id for static generation
-    return news.map((article) => ({
-      id: article.id,
-    }));
-  } catch (error) {
-    console.error("Failed to generate static params for news:", error);
-    // Return empty array on error - pages will be generated on-demand
-    return [];
-  }
-}
+// Very long slugs (full headlines as URLs) make paths under `.next/server/app/news/<slug>/`
+// exceed Windows MAX_PATH; Next then fails with ENOENT on mkdir/open when updating the prerender cache.
+// Dynamic rendering avoids writing those filesystem entries. Data fetches still use `next.revalidate`.
+export const dynamic = "force-dynamic";
 
 // Generate metadata for news detail page (runs on server)
 export async function generateMetadata({
@@ -75,15 +47,10 @@ export async function generateMetadata({
     console.error("Failed to fetch news SEO metadata:", error);
   }
 
-  // Fallback metadata with language support
-  const language = await getServerLanguage(cookies());
+  // Static fallback — do not call cookies() here (ISR + generateStaticParams conflict with DYNAMIC_SERVER_USAGE).
   return {
-    title:
-      language === "it" ? "Articolo | TG CALABRIA" : "News Article | TG CALABRIA",
-    description:
-      language === "it"
-        ? "Leggi l'ultimo articolo di TG CALABRIA"
-        : "Read the lat est news article on TG CALABRIA",
+    title: "News Article | TG CALABRIA",
+    description: "Read the latest news article on TG CALABRIA",
   };
 }
 
